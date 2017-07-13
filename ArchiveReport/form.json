@@ -1,0 +1,90 @@
+{
+  "elements": [
+    {
+      "type": "Label",
+      "label": "Select a PNG file as your PDF logo"
+    },
+    {
+      "name": "LogoData",
+      "type": "SelectFile",
+      "caption": "Logo",
+      "extensions": ".png"
+    },
+    {
+      "type": "ValidationTextBox",
+      "name": "CompanyName",
+      "caption": "Company"
+    },
+    {
+      "type": "ValidationTextBox",
+      "name": "ReportTitle",
+      "caption": "Title"
+    },
+    {
+      "type": "ValidationTextBox",
+      "name": "ReportFooter",
+      "caption": "Footer"
+    },
+    {
+      "type": "SelectVariable",
+      "name": "DataVariable",
+      "caption": "Data Source"
+    },
+    {
+      "name": "DataAggregation",
+      "type": "Select",
+      "caption": "Data Aggregation",
+      "options": [
+        {
+          "label": "Hour",
+          "value": 0
+        },
+        {
+          "label": "Day",
+          "value": 1
+        },
+        {
+          "label": "Week",
+          "value": 2
+        },
+        {
+          "label": "Month",
+          "value": 3
+        },
+        {
+          "label": "Year",
+          "value": 4
+        }
+      ]
+    },
+    {
+      "type": "NumberSpinner",
+      "name": "DataCount",
+      "caption": "Data Count"
+    },
+    {
+      "type": "CheckBox",
+      "name": "DataSkipFirst",
+      "caption": "Skip current unfinished dataset"
+    },
+    {
+      "type": "NumberSpinner",
+      "name": "DataLimitMin",
+      "digits": 2,
+      "caption": "Data Limit (Min)"
+    },
+    {
+      "type": "NumberSpinner",
+      "name": "DataLimitMax",
+      "digits": 2,
+      "caption": "Data Limit (Max)"
+    }
+  ],
+  "actions": [
+    {
+      "type": "Button",
+      "label": "Generate report now!",
+      "onClick": "if(RAC_GenerateReport($id)) { \n echo (new IPSModule($id))->Translate('Done! Please open the media file beneath this instance!'); \n };"
+    }
+  ]
+}
