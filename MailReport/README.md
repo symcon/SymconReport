@@ -59,12 +59,12 @@ Mail Report aktiv | Variable | Aktiviert bzw. deaktiviert das Modul
 ### 7. PHP-Befehlsreferenz
 
 `boolean MR_SendInfo(integer $InstanzID);`  
-Verschickt eine Info-Mail über das letzte abgeschlossene Zeitintervall
+Verschickt eine Info-Mail über das letzte abgeschlossene Zeitintervall  
 Beispiel:  
 `MR_SendInfo(12345);`
 
 `boolean MR_SetActive(integer $InstanzID, boolean $Active);`  
-Aktiviert oder deaktiviert das Modul in Abhängigkeit von $Active
-Beispiel:
-// Aktiviere das Modul
-`MR_SetActive(12345, true);`
+Aktiviert oder deaktiviert das Modul in Abhängigkeit von $Active  
+Beispiel:  
+`// Aktiviere das Modul  
+MR_SetActive(12345, true);`
