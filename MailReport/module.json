@@ -1,0 +1,14 @@
+{
+    "id": "{3A92E561-EA68-46FC-8560-769AD333202C}",
+    "name": "MailReport",
+    "type": 3,
+    "vendor": "",
+    "aliases": 
+    [
+        "Mail-Report"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "MR"
+}

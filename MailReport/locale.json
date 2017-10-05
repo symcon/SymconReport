@@ -1,0 +1,30 @@
+{
+    "translations": {
+        "de": { 
+            "Send data": "Sende Daten",
+            "Aggregated Variable": "Aggregierte Variable",
+            "Interval of Messages": "Intervall der Nachrichten",
+            "Daily": "Täglich",
+            "Weekly": "Wöchentlich",
+            "Monthly": "Monatlich",
+            "IP-Symcon: Aggregated Data of Variable": "IP-Symcon: Aggregierte Daten der Variablen",
+            "for": "für",
+            "You can find the data for the time interval attached to this mail.": "Sie finden die Daten für das Zeitintervall im Anhang dieser E-Mail.",
+            "Calendar Week": "Kalenderwoche",
+            "January": "Januar",
+            "February": "Februar",
+            "March": "März",
+            "April": "April",
+            "May": "Mai",
+            "June": "Juni",
+            "July": "Juli",
+            "August": "August",
+            "September": "September",
+            "October": "Oktober",
+            "November": "November",
+            "December": "Dezember",
+            "Mail Report active": "Mail Report aktiv",
+            "None": "Keine"
+        }
+    }
+}
