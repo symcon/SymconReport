@@ -1,10 +1,10 @@
 {
   "id": "{4D322247-AB07-4C49-BE60-5A04DE0EA3D8}",
-  "name": "ArchiveReport",
+  "name": "PDFReport",
   "type": 3,
   "vendor": "",
   "aliases": [
-    "Report (Archive)"
+    "Report (PDF)"
   ],
   "parentRequirements": [],
   "childRequirements": [],

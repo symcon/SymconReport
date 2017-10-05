@@ -2,7 +2,7 @@
 
 include_once __DIR__ . '/../libs/vendor/autoload.php';
 
-class ArchiveReport extends IPSModule
+class PDFReport extends IPSModule
 {
 
     public function Create()
