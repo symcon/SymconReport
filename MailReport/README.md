@@ -27,7 +27,7 @@ Das Modul verschickt regelmäßig die geloggten aggregierten Daten einer Variabl
 ### 3. Software-Installation
 
 Über das Modul-Control folgende URL hinzufügen.  
-`git://github.com/paresy/SymconReport.git`  
+`git://github.com/symcon/SymconReport.git`  
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
