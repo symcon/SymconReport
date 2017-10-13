@@ -108,16 +108,22 @@ class MailReport extends IPSModule {
         $file = fopen($filename, "w");
         fwrite($file, "TimeStamp,Avg,MinTime,Min,MaxTime,Max\n");
 
+        $digits = 7;
+        $profile = $this->GetProfileName(IPS_GetVariable($this->ReadPropertyInteger("Variable")));
+        if (IPS_VariableProfileExists($profile)) {
+            $digits = IPS_GetVariableProfile($profile)["Digits"];
+        }
+        
         $aggregatedValues = AC_GetAggregatedValues($this->ReadPropertyInteger("ArchiveControlID"), $this->ReadPropertyInteger("Variable"),
                                                     $this->GetAggregation(), $this->GetAggregationStart(), $this->GetAggregationEnd(), 0);
         for($i = sizeof($aggregatedValues) - 1; $i >= 0; $i--) {
             $value = $aggregatedValues[$i];
             $dataString = date("j.n.Y H:i:s", $value["TimeStamp"]) . "," . 
-                          number_format($value["Avg"], 324, ".", "") . "," . 
+                          rtrim(rtrim(number_format($value["Avg"], $digits, ".", ""), "0"), ".") . "," . 
                           date("j.n.Y H:i:s", $value["MinTime"]) . "," . 
-                          number_format($value["Min"], 324, ".", "") . "," . 
+                          rtrim(rtrim(number_format($value["Min"], $digits, ".", ""), "0"), ".") . "," . 
                           date("j.n.Y H:i:s", $value["MaxTime"]) . "," . 
-                          number_format($value["Max"], 324, ".", "") . "\n";
+                          rtrim(rtrim(number_format($value["Max"], $digits, ".", ""), "0"), ".") . "\n";
             fwrite($file, $dataString);
         }
 
@@ -275,6 +281,14 @@ class MailReport extends IPSModule {
 
     private function CreateLabel(int $objectID) {
         return IPS_GetName($objectID) . " (" . $objectID . ")";
+    }
+
+    private function GetProfileName($variable){
+        if($variable['VariableCustomProfile'] != ""){
+            return $variable['VariableCustomProfile'];
+        } else {
+            return $variable['VariableProfile'];
+        }
     }
 }
 
