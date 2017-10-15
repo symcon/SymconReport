@@ -119,11 +119,11 @@ class MailReport extends IPSModule {
         for($i = sizeof($aggregatedValues) - 1; $i >= 0; $i--) {
             $value = $aggregatedValues[$i];
             $dataString = date("j.n.Y H:i:s", $value["TimeStamp"]) . "," . 
-                          rtrim(rtrim(number_format($value["Avg"], $digits, ".", ""), "0"), ".") . "," . 
+                          number_format($value["Avg"], $digits, ".", "") . "," .
                           date("j.n.Y H:i:s", $value["MinTime"]) . "," . 
-                          rtrim(rtrim(number_format($value["Min"], $digits, ".", ""), "0"), ".") . "," . 
+                          number_format($value["Min"], $digits, ".", "") . "," .
                           date("j.n.Y H:i:s", $value["MaxTime"]) . "," . 
-                          rtrim(rtrim(number_format($value["Max"], $digits, ".", ""), "0"), ".") . "\n";
+                          number_format($value["Max"], $digits, ".", "") . "\n";
             fwrite($file, $dataString);
         }
 
