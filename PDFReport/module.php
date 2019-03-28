@@ -169,7 +169,7 @@ class PDFReport extends IPSModule
 			
 <table cellpadding="5" cellspacing="0" border="0" width="95%">
 <tr>
-	<td width="50%"><img src="data:image/png;base64,$imageData"></td>
+	<td width="50%"><img src="@$imageData"></td>
 	<td align="right">
 		<br/><br/><br/>
 		$company<br/>
