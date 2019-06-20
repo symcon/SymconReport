@@ -21,7 +21,7 @@ Dieses Modul bietet die Funktion Archivwerte als Bericht in einer PDF zusammenzu
 
 ### 2. Voraussetzungen
 
-- IP-Symcon ab Version 4.x
+- IP-Symcon ab Version 5.1
 
 ### 3. Software-Installation
 
@@ -29,7 +29,7 @@ Dieses Modul bietet die Funktion Archivwerte als Bericht in einer PDF zusammenzu
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
-- Unter "Instanz hinzufügen" ist das 'Szenensteuerung'-Modul unter dem Hersteller '(Sonstige)' aufgeführt.  
+- Über "Instanz hinzufügen" ist das 'Report(PDF)'-Modul in der Schnellfiltersuche auffindbar und kann über "OK" hinzugefügt werden.  
 
 __Konfigurationsseite__:
 
