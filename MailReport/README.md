@@ -21,17 +21,16 @@ Das Modul verschickt regelmäßig die geloggten aggregierten Daten einer Variabl
 
 ### 2. Voraussetzungen
 
-- IP-Symcon ab Version 4.3
+- IP-Symcon ab Version 5.1
 - Eingerichtete SMTP-Instanz zum Versenden von E-Mails
 
 ### 3. Software-Installation
 
-Über das Modul-Control folgende URL hinzufügen.  
-`git://github.com/symcon/SymconReport.git`  
+Über den Modul-Store kann unter der Kategorie "Informationen"=>"Aufbereitung" oder direkt über die Suche nach "Report Modul" das Modul gefunden werden. Durch den Knopf "Installieren" wird das Modul IP-Symcon zur Verfügung gestellt.
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
-- Unter "Instanz hinzufügen" ist das 'Mail-Report'-Modul unter dem Hersteller '(Sonstiges)' aufgeführt.  
+- Über "Instanz hinzufügen" ist das 'Report(Mail)'-Modul in der Schnellfiltersuche auffindbar und kann über "OK" hinzugefügt werden.   
 
 __Konfigurationsseite__:
 
