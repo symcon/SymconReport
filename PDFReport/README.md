@@ -21,15 +21,15 @@ Dieses Modul bietet die Funktion Archivwerte als Bericht in einer PDF zusammenzu
 
 ### 2. Voraussetzungen
 
-- IP-Symcon ab Version 4.x
+- IP-Symcon ab Version 4.0
 
 ### 3. Software-Installation
 
-Über den Modul-Store kann unter der Kategorie "Informationen"=>"Aufbereitung" oder direkt über die Suche nach "Report Modul" das Modul gefunden werden. Durch den Knopf "Installieren" wird das Modul IP-Symcon zur Verfügung gestellt.
+Über den Modul Store kann unter der Kategorie "Informationen"=>"Aufbereitung" oder direkt über die Suche nach "Report Modul" das Modul gefunden werden. Durch den Knopf "Installieren" wird das Modul IP-Symcon zur Verfügung gestellt.
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
-- Unter "Instanz hinzufügen" ist das 'Szenensteuerung'-Modul unter dem Hersteller '(Sonstige)' aufgeführt.  
+- Unter "Instanz hinzufügen" ist das 'Report(PDF)'-Modul unter dem Hersteller '(Gerät)' aufgeführt.  
 
 __Konfigurationsseite__:
 
@@ -42,13 +42,13 @@ Fußzeile                | Fußzeile
 Datenquelle             | Variable aus der die Datensätze erstellt werden
 Aggregation             | Definiert Aggregationsstufe der aufgelisteten Datensätze (Stunde - Jahr)
 Anzahl                  | Anzahl der aufgelisteten Datensätze
-Datensatz überspringen  | Der unvollständige erste Datensatz wird verworfen (true)
-Toleranz (Min)          | Akzeptierter Minimalwert der aggregierten Datensätze
-Toleranz (Max)          | Akzeptierter Maximalwert der aggregierten Datensätze
+Datensatz überspringen  | Ist diese Option aktiviert, wird der aktuellste unvollständige Datensatz verworfen 
+Toleranz (Min)          | Akzeptierter Minimalwert der aggregierten Datensätze. Werte außerhalb der Toleranz werden ignoriert.
+Toleranz (Max)          | Akzeptierter Maximalwert der aggregierten Datensätze. Werte außerhalb der Toleranz werden ignoriert.
 
 __Beispiel Dokument__
 <br>
-<img src="Example.png" width="420" height="594" />
+<img src="Example.jpg" width="827" height="386,5" />
 
 ### 5. Statusvariablen und Profile
 
@@ -59,7 +59,7 @@ Die PDF wird als "Report (PDF)" generiert.
 
 Name         | Typ    | Beschreibung
 ------------ | ------ | ----------------
-Report (PDF) | Medien | Erstellte PDF, welche im Objektbaum bei Doppelklick ein Popup zum Download der fertigen PDF öffnet
+Report (PDF) | Medien | Erstellte PDF, welche über das WebFront heruntergeladen werden kann.
 
 
 ##### Profile:
@@ -68,12 +68,13 @@ Es werden keine zusätzlichen Profile erstellt.
 
 ### 6. WebFront
 
-Das WebFront hat für dieses Modul keinerlei Funktionalität.
+Über das WebFront kann die genrierte PDF heruntergeladen werden.
 
 ### 7. PHP-Befehlsreferenz
 
 `boolean RAC_GenerateReport(integer $InstanzID);`  
-Generiert ein PDF mit den im Modul mit der InstanzID $InstanzID angegebenen Werten. Die PDF steht dann als Mediendatei zur Verfügung. 
+Generiert ein PDF mit den im Modul mit der InstanzID $InstanzID angegebenen Werten. Die PDF steht dann als Mediendatei zur Verfügung.  
+Wenn bereits eine Datei existiert, wird diese aktualisiert.
 Die Funktion liefert keinerlei Rückgabewert.  
 Beispiel:  
 `RAC_GenerateReport(12345);`
