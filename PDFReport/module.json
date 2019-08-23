@@ -9,5 +9,6 @@
   "parentRequirements": [],
   "childRequirements": [],
   "implemented": [],
-  "prefix": "RAC"
+  "prefix": "RAC",
+  "url": "https://github.com/symcon/SymconReport/tree/master/PDFReport"
 }
