@@ -2,7 +2,7 @@
 
 Das Modul verschickt regelmäßig die geloggten aggregierten Daten einer Variablen via E-Mail
 
-### Inhaltverzeichnis
+### Inhalstverzeichnis
 
 1. [Funktionsumfang](#1-funktionsumfang)
 2. [Voraussetzungen](#2-voraussetzungen)
@@ -26,7 +26,7 @@ Das Modul verschickt regelmäßig die geloggten aggregierten Daten einer Variabl
 
 ### 3. Software-Installation
 
-Über den Modul-Store kann unter der Kategorie "Informationen"=>"Aufbereitung" oder direkt über die Suche nach "Report Modul" das Modul gefunden werden. Durch den Knopf "Installieren" wird das Modul IP-Symcon zur Verfügung gestellt.
+Über den Module Store kann unter der Kategorie "Informationen"=>"Aufbereitung" oder direkt über die Suche nach "Report Modul" das Modul gefunden werden. Durch den Knopf "Installieren" wird das Modul IP-Symcon zur Verfügung gestellt.
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 

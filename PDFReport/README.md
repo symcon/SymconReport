@@ -1,7 +1,7 @@
 # PDF Report
 Dieses Modul bietet die Funktion Archivwerte als Bericht in einer PDF zusammenzufassen. 
 
-### Inhaltverzeichnis
+### Inhaltsverzeichnis
 
 1. [Funktionsumfang](#1-funktionsumfang)
 2. [Voraussetzungen](#2-voraussetzungen)
