@@ -39,6 +39,12 @@ class MailReport extends IPSModule
         if (GetValue($this->GetIDForIdent('Active'))) {
             $this->UpdateTimer();
         }
+
+        //Adding References
+        foreach ($this->GetReferenceList() as $referenceID) {
+            $this->UnregisterReference($referenceID);
+        }
+        $this->RegisterReference($this->ReadPropertyInteger('Variable'));
     }
 
     public function GetConfigurationForm()
