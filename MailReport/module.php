@@ -44,7 +44,9 @@ class MailReport extends IPSModule
         foreach ($this->GetReferenceList() as $referenceID) {
             $this->UnregisterReference($referenceID);
         }
-        $this->RegisterReference($this->ReadPropertyInteger('Variable'));
+        if(IPS_VariableExists($this->ReadPropertyInteger('Variable'))) {
+            $this->RegisterReference($this->ReadPropertyInteger('Variable'));  
+        }
     }
 
     public function GetConfigurationForm()
