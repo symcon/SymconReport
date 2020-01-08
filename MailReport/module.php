@@ -226,16 +226,16 @@ class MailReport extends IPSModule
                 return mktime(intval(date('H')) - 1, 0, 0);
 
             case 1:
-                return mktime(0, 0, 0, date('n'), intval(date('j')) - 1);
+                return mktime(0, 0, 0, intval(date('n')), intval(date('j')) - 1);
 
             case 2:
-                return mktime(0, 0, 0, date('n'), intval(date('j')) - intval(date('N')) - 6);
+                return mktime(0, 0, 0, intval(date('n')), intval(date('j')) - intval(date('N')) - 6);
 
             case 3:
                 return mktime(0, 0, 0, intval(date('n')) - 1, 1);
 
             case 5:
-                return mktime(date('H'), intval(date('i')) - (intval(date('i')) % 5) - 5, 0);
+                return mktime(intval(date('H')), intval(date('i')) - (intval(date('i')) % 5) - 5, 0);
         }
     }
 
@@ -249,13 +249,13 @@ class MailReport extends IPSModule
                 return mktime(0, 0, -1);
 
             case 2:
-                return mktime(0, 0, -1, date('n'), intval(date('j')) - intval(date('N')) + 1);
+                return mktime(0, 0, -1, intval(date('n')), intval(date('j')) - intval(date('N')) + 1);
 
             case 3:
-                return mktime(0, 0, -1, date('n'), 1);
+                return mktime(0, 0, -1, intval(date('n')), 1);
 
             case 5:
-                return mktime(date('H'), intval(date('i')) - (intval(date('i')) % 5), -1);
+                return mktime(intval(date('H')), intval(date('i')) - (intval(date('i')) % 5), -1);
         }
     }
 
@@ -286,11 +286,11 @@ class MailReport extends IPSModule
                 break;
 
             case 1: // Daily
-                $difference = mktime(0, 0, 0, date('n'), intval(date('j')) + 1) - time();
+                $difference = mktime(0, 0, 0, intval(date('n')), intval(date('j')) + 1) - time();
                 break;
 
             case 2: // Weekly
-                $difference = mktime(0, 0, 0, date('n'), intval(date('j')) + 7 - (intval(date('N')) - 1)) - time();
+                $difference = mktime(0, 0, 0, intval(date('n')), intval(date('j')) + 7 - (intval(date('N')) - 1)) - time();
                 break;
 
             case 3: // Monthly
@@ -298,7 +298,7 @@ class MailReport extends IPSModule
                 break;
 
             case 5: // Every five minutes
-                $difference = mktime(date('H'), intval(date('i')) + 5 - (intval(date('i')) % 5), 0) - time();
+                $difference = mktime(intval(date('H')), intval(date('i')) + 5 - (intval(date('i')) % 5), 0) - time();
                 break;
         }
 
