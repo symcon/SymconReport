@@ -30,7 +30,7 @@ Das Modul verschickt regelmäßig die geloggten aggregierten Daten einer Variabl
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
-- Über "Instanz hinzufügen" ist das 'Report(Mail)'-Modul in der Schnellfiltersuche auffindbar und kann über "OK" hinzugefügt werden.   
+- Über "Instanz hinzufügen" kann das 'Report(Mail)'-Modul mithilfe der Schnellsuche gefunden werden.   
 
 __Konfigurationsseite__:
 
