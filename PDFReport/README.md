@@ -29,7 +29,7 @@ Dieses Modul bietet die Funktion Archivwerte als Bericht in einer PDF zusammenzu
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
-- Unter "Instanz hinzufügen" ist das 'Report(PDF)'-Modul unter dem Hersteller '(Gerät)' aufgeführt.  
+- Unter "Instanz hinzufügen" kann das 'Report(PDF)'-Modul mithilfe der Schnellsuche gefunden werden.  
 
 __Konfigurationsseite__:
 
