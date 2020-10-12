@@ -28,7 +28,7 @@
 // Swahili
 
 global $l;
-$l = array();
+$l = Array();
 
 // PAGE META DESCRIPTORS --------------------------------------
 

@@ -28,7 +28,7 @@
 // Korean
 
 global $l;
-$l = array();
+$l = Array();
 
 // PAGE META DESCRIPTORS --------------------------------------
 
