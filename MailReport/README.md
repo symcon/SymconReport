@@ -21,7 +21,7 @@ Das Modul verschickt regelmäßig die geloggten aggregierten Daten einer Variabl
 
 ### 2. Voraussetzungen
 
-- IP-Symcon ab Version 5.1
+- IP-Symcon ab Version 5.5
 - Eingerichtete SMTP-Instanz zum Versenden von E-Mails
 
 ### 3. Software-Installation
