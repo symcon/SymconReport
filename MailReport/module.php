@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 const ARCHIVE_CONTROL_MODULE_ID = '{43192F0B-135B-4CE7-A0A7-1475603F3060}';
+const SMTP_MODULE_ID = '{375EAF21-35EF-4BC4-83B3-C780FD8BD88A}';
 
 class MailReport extends IPSModule
 {
@@ -96,7 +97,7 @@ class MailReport extends IPSModule
             return;
         }
 
-        if (!IPS_InstanceExists($this->ReadPropertyInteger('SMTP'))) {
+        if (!IPS_InstanceExists($this->ReadPropertyInteger('SMTP')) || (IPS_GetInstance($this->ReadPropertyInteger('SMTP'))['ModuleInfo']['ModuleID'] != SMTP_MODULE_ID)) {
             echo $this->Translate('SMTP Module does not exist');
             return;
         }
