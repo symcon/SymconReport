@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-const SMTP_MODULE_ID = '{375EAF21-35EF-4BC4-83B3-C780FD8BD88A}';
 const ARCHIVE_CONTROL_MODULE_ID = '{43192F0B-135B-4CE7-A0A7-1475603F3060}';
+const SMTP_MODULE_ID = '{375EAF21-35EF-4BC4-83B3-C780FD8BD88A}';
 
 class MailReport extends IPSModule
 {
@@ -53,11 +53,13 @@ class MailReport extends IPSModule
     {
         $form = json_decode(file_get_contents(__DIR__ . '/form.json'));
 
-        $smtpIndex = $this->GetElementIndexByName('SMTP');
+        $variableIndex = $this->GetElementIndexByName('Variable');
 
-        $smtpOptions = [['label' => $this->Translate('None'), 'value' => 0]];
-        foreach (IPS_GetInstanceListByModuleID(SMTP_MODULE_ID) as $smtpID) {
-            $smtpOptions[] = ['label' => $this->CreateLabel($smtpID), 'value' => $smtpID];
+        $variableOptions = [['label' => $this->Translate('None'), 'value' => 0]];
+        foreach (AC_GetAggregationVariables($this->ReadPropertyInteger('ArchiveControlID'), false) as $variable) {
+            if ($variable['AggregationActive'] && IPS_ObjectExists($variable['VariableID'])) {
+                $variableOptions[] = ['label' => $this->CreateLabel($variable['VariableID']), 'value' => $variable['VariableID']];
+            }
         }
 
         $compare = function ($a, $b)
@@ -72,19 +74,6 @@ class MailReport extends IPSModule
                 return strcmp($a['label'], $b['label']);
             }
         };
-
-        usort($smtpOptions, $compare);
-        $form->elements[$smtpIndex]->options = $smtpOptions;
-
-        $variableIndex = $this->GetElementIndexByName('Variable');
-
-        $variableOptions = [['label' => $this->Translate('None'), 'value' => 0]];
-        foreach (AC_GetAggregationVariables($this->ReadPropertyInteger('ArchiveControlID'), false) as $variable) {
-            if ($variable['AggregationActive'] && IPS_ObjectExists($variable['VariableID'])) {
-                $variableOptions[] = ['label' => $this->CreateLabel($variable['VariableID']), 'value' => $variable['VariableID']];
-            }
-        }
-
         usort($variableOptions, $compare);
         $form->elements[$variableIndex]->options = $variableOptions;
         return json_encode($form);
