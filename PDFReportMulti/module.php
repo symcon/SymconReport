@@ -87,20 +87,20 @@ class PDFReportMulti extends IPSModule
         foreach ($json as $data) {
             $values = AC_GetAggregatedValues(
                 $archiveID,
-                $data["VariableID"],
+                $data['VariableID'],
                 $this->ReadPropertyInteger('DataAggregation'),
                 $startTime,
                 $endTime,
                 $dataCount
             );
-            
+
             if ($this->ReadPropertyBoolean('DataSkipFirst')) {
                 array_shift($values);
             }
 
-            $dataValues[$data["VariableID"]] = $values;
+            $dataValues[$data['VariableID']] = $values;
         }
-        
+
         return $dataValues;
     }
 
@@ -159,8 +159,8 @@ EOT;
         // Transform values into a time based array
         $timeValues = [];
         foreach ($this->FetchData() as $id => $values) {
-            foreach($values as $value) {
-                $timeValues[$value['TimeStamp']][$id] = $value["Avg"];
+            foreach ($values as $value) {
+                $timeValues[$value['TimeStamp']][$id] = $value['Avg'];
             }
         }
 
@@ -170,7 +170,7 @@ EOT;
             $rows .= '<tr>';
             $rows .= '<td width="25%">' . date($this->GetDateTimeFormatForAggreagtion(), $ts) . '</td>';
             foreach ($json as $data) {
-                $rows .= '<td style="text-align: center;">' . GetValueFormattedEx($data["VariableID"], $values[$data["VariableID"]]) . '</td>';
+                $rows .= '<td style="text-align: center;">' . GetValueFormattedEx($data['VariableID'], $values[$data['VariableID']]) . '</td>';
             }
             $rows .= '</tr>';
         }
@@ -190,9 +190,9 @@ EOT;
         $headCols = '';
         $json = json_decode($this->ReadPropertyString('DataVariables'), true);
         foreach ($json as $data) {
-            $name = $data["Name"] ? $data["Name"] : IPS_GetName($data["VariableID"]); 
+            $name = $data['Name'] ? $data['Name'] : IPS_GetName($data['VariableID']);
             $headCols .= '<td style="text-align: center;"><b>' . $name . '</b></td>';
-        }        
+        }
 
         return <<<EOT
 $header
@@ -251,7 +251,7 @@ EOT;
     {
         $json = json_decode($this->ReadPropertyString('DataVariables'), true);
         foreach ($json as $data) {
-            if ($data["VariableID"] == 0) {
+            if ($data['VariableID'] == 0) {
                 echo $this->Translate('Selected data source is not a valid variable!');
                 return false;
             }
