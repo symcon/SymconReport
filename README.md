@@ -6,8 +6,11 @@
 
 Folgende Module beinhaltet das SymconReport Repository:
 
-- __PDFReport__ ([Dokumentation](PDFReport))  
-	Erstellt ein Report von Archivwerten einer Zeitspanne als PDF
+- __PDFReport (Single)__ ([Dokumentation](PDFReportSingle))  
+    Erstellt einen Report von Archivwerten einer Variable mit Min/Max/Avg einer Zeitspanne als PDF
+
+- __PDFReport (Multi)__ ([Dokumentation](PDFReportMulti)  
+    Erstellt einen Report von Archivwerten mehrerer Variablen einer Zeitspanne als PDF
 
 - __MailReport__ ([Dokumentation](MailReport))  
-	Erstellt einen CSV-Report von Archivwerten und sendet diesen per E-Mail(SMTP)
+    Erstellt einen CSV-Report von Archivwerten und sendet diesen per E-Mail(SMTP)

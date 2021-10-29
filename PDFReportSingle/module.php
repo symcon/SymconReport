@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 include_once __DIR__ . '/../libs/vendor/autoload.php';
 
-class PDFReport extends IPSModule
+class PDFReportSingle extends IPSModule
 {
     public function Create()
     {
@@ -176,30 +176,14 @@ EOT;
 
     private function GenerateHTMLRows()
     {
-        $variable = IPS_GetVariable($this->ReadPropertyInteger('DataVariable'));
-
-        if ($variable['VariableCustomProfile'] != '') {
-            $profileName = $variable['VariableCustomProfile'];
-        } else {
-            $profileName = $variable['VariableProfile'];
-        }
-
-        $prefix = '';
-        $suffix = '';
-        $digits = 0;
-        if (IPS_VariableProfileExists($profileName)) {
-            $profile = IPS_GetVariableProfile($profileName);
-            $prefix = $profile['Prefix'];
-            $suffix = $profile['Suffix'];
-            $digits = $profile['Digits'];
-        }
+        $variableID = $this->ReadPropertyInteger('DataVariable');
 
         $rows = '';
         foreach ($this->FetchData() as $data) {
             $date = date($this->GetDateTimeFormatForAggreagtion(), $data['TimeStamp']);
-            $min = $prefix . number_format($data['Min'], $digits, ',', '') . $suffix;
-            $max = $prefix . number_format($data['Max'], $digits, ',', '') . $suffix;
-            $avg = $prefix . number_format($data['Avg'], $digits, ',', '') . $suffix;
+            $min = GetValueFormattedEx($variableID, $data['Min']);
+            $max = GetValueFormattedEx($variableID, $data['Max']);
+            $avg = GetValueFormattedEx($variableID, $data['Avg']);
 
             $status = $this->CheckDataLimit($data['Min'], $data['Max']);
 
@@ -290,7 +274,7 @@ EOT;
     public function GenerateReport()
     {
         if ($this->ReadPropertyInteger('DataVariable') == 0) {
-            echo $this->Translate('Select data source is not a valid variable!');
+            echo $this->Translate('Selected data source is not a valid variable!');
             return false;
         }
 

@@ -21,7 +21,7 @@ Dieses Modul bietet die Funktion Archivwerte als Bericht in einer PDF zusammenzu
 
 ### 2. Voraussetzungen
 
-- IP-Symcon ab Version 4.0
+- IP-Symcon ab Version 5.5
 
 ### 3. Software-Installation
 
@@ -29,7 +29,7 @@ Dieses Modul bietet die Funktion Archivwerte als Bericht in einer PDF zusammenzu
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
-- Unter "Instanz hinzufügen" kann das 'Report(PDF)'-Modul mithilfe des Schnellfilters gefunden werden.
+- Unter "Instanz hinzufügen" kann das 'Report (PDF, Multi)'-Modul mithilfe des Schnellfilters gefunden werden.
     - Weitere Informationen zum Hinzufügen von Instanzen in der [Dokumentation der Instanzen](https://www.symcon.de/service/dokumentation/konzepte/instanzen/#Instanz_hinzufügen)
 
 __Konfigurationsseite__:
@@ -40,16 +40,13 @@ Logo                    | Auswählbare Grafik als PNG
 Firma                   | Firmenname
 Title                   | Titel der PDF
 Fußzeile                | Fußzeile
-Datenquelle             | Variable aus der die Datensätze erstellt werden
+Datenquelle             | Mehrere Variablen aus der die Datensätze pro Spalte erstellt werden
 Aggregation             | Definiert Aggregationsstufe der aufgelisteten Datensätze (Stunde - Jahr)
 Anzahl                  | Anzahl der aufgelisteten Datensätze
 Datensatz überspringen  | Ist diese Option aktiviert, wird der aktuellste unvollständige Datensatz verworfen 
-Toleranz (Min)          | Akzeptierter Minimalwert der aggregierten Datensätze. Werte außerhalb der Toleranz werden ignoriert.
-Toleranz (Max)          | Akzeptierter Maximalwert der aggregierten Datensätze. Werte außerhalb der Toleranz werden ignoriert.
 
 __Beispiel Dokument__
-<br>
-<img src="Example.jpg" width="827" height="386,5" />
+![Beispiel](example.png)
 
 ### 5. Statusvariablen und Profile
 
@@ -69,7 +66,7 @@ Es werden keine zusätzlichen Profile erstellt.
 
 ### 6. WebFront
 
-Über das WebFront kann die genrierte PDF heruntergeladen werden.
+Über das WebFront kann die generierte PDF heruntergeladen werden.
 
 ### 7. PHP-Befehlsreferenz
 
