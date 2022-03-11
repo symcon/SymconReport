@@ -46,7 +46,7 @@ class PDFReportEnergy extends IPSModule
             return false;
         }
 
-        $pdfContent = $this->GeneratePDF('IP-Symcon ' . IPS_GetKernelVersion(),'report.pdf');
+        $pdfContent = $this->GeneratePDF('IP-Symcon ' . IPS_GetKernelVersion(), 'report.pdf');
 
         $mediaID = $this->GetIDForIdent('ReportPDF');
         IPS_SetMediaContent($mediaID, base64_encode($pdfContent));
@@ -180,7 +180,6 @@ class PDFReportEnergy extends IPSModule
         $startTime = strtotime('first day of last month');
         $endTime = strtotime('first day of this month');
 
-
         $counterID = $this->ReadPropertyInteger('CounterID');
 
         $month = $this->Translate(date('F', $startTime));
@@ -191,7 +190,7 @@ class PDFReportEnergy extends IPSModule
         if (($temperatureID = $this->ReadPropertyInteger('TemperatureID')) != 0) {
             $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0)[0]['Avg'];
             $avgTemp = 'Die Durchschnittstemperatur betrug: ' . $avgTemp . ' °C <br>';
-        }else{
+        } else {
             $avgTemp = '';
         }
 

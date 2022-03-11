@@ -18,19 +18,18 @@
             "February": "Februar",
             "March": "März",
             "April": "April",
-            "May":"Mai",
+            "May": "Mai",
             "June": "Juni",
-            "July":"Juli",
+            "July": "Juli",
             "August": "August",
-            "September" : "September",
+            "September": "September",
             "October": "Oktober",
             "November": "November",
             "December": "Dezember",
             "Your": "Ihr",
             " behaviour": "verbrauch",
             "The Behaviour": "Der Verbrauch",
-            "Generate PDF" : "Generiere PDF"
-
+            "Generate PDF": "Generiere PDF"
         }
     }
 }

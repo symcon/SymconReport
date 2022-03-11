@@ -63,7 +63,7 @@
     ],
     "actions": [
         {
-            "type":"Button",
+            "type": "Button",
             "caption": "Generate PDF",
             "onClick": "if(RAC_GenerateEnergyReport($id, 'month')) { \n echo (new IPSModule($id))->Translate('Done! Please open the media file beneath this instance!'); \n };"
         }
