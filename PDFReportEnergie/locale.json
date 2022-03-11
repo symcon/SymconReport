@@ -1,0 +1,36 @@
+{
+    "translations": {
+        "de": {
+            "Logo": "Logo",
+            "Energy Type": "Verbrauchsart",
+            "Consume counter": "Verbrauchszähler",
+            "Temperature": "Temperatur",
+            "Prediction": "Vorhersage",
+            "CO2 Type": "CO2 Typ",
+            "Inactive": "Inaktiv",
+            "Powermix": "Strommix",
+            "Displacement power mix": "Verdrängungsstrommix",
+            "Natural gas": "Erdgas",
+            "Fuel oil": "Heizöl",
+            "Pellets": "Pallets",
+            "Done! Please open the media file beneath this instance!": "Fertig! Bitte öffnen Sie die Mediendatei unterhalb der Instanz!",
+            "January": "Januar",
+            "February": "Februar",
+            "March": "März",
+            "April": "April",
+            "May":"Mai",
+            "June": "Juni",
+            "July":"Juli",
+            "August": "August",
+            "September" : "September",
+            "October": "Oktober",
+            "November": "November",
+            "December": "Dezember",
+            "Your": "Ihr",
+            " behaviour": "verbrauch",
+            "The Behaviour": "Der Verbrauch",
+            "Generate PDF" : "Generiere PDF"
+
+        }
+    }
+}
