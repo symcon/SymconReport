@@ -102,19 +102,19 @@ class PDFReportEnergy extends IPSModule
 
     private function GenerateHTMLHeader()
     {
-        $date = $this->Translate(date('F', strtotime('-1 month'))) . ' ' . date('Y');
-        $energy = $this->Translate('Your') . ' ' . $this->ReadPropertyString('EnergyType') . $this->Translate(' behaviour');
-        $title = strtoupper($this->Translate('The Behaviour'));
+        $date = strtoupper($this->Translate(date('F', strtotime('-1 month'))) . ' ' . date('Y'));
+        $energy = strtoupper($this->Translate('Your') . ' ' . $this->ReadPropertyString('EnergyType') . $this->Translate(' consumption'));
+        $title = strtoupper($this->Translate('The consumption'));
         $logo = $this->ReadPropertyString('LogoData');
 
         return <<<EOT
-        <table cellpadding="5" cellspacing="0" border="0" width="95%">
+        <table cellpadding="0" cellspacing="0" border="0" width="95%">
         <tr>
             <td>
                 <br/><br/><br/>
                 $date<br/>
-                $energy<br/><hr/>
-                <h1>$title </h1>
+                $energy<br/><hr style="height: 5px"/>
+                <h1 style="font-weight: normal; font-size: 25px">$title </h1>
             </td>
             <td width="50%" align="right"><img src="@$logo"></td>
         </tr>
@@ -134,13 +134,27 @@ class PDFReportEnergy extends IPSModule
             }
         }
 
-        //set the opacity of the vertical lines on 0 (trancparence)
-        //"remove" the vertical lines
+        //fill the bars
+        $object = $example->svg->g[3]->g[1];
+        $object->addAttribute('fill', 'yellowgreen');
+
+        //transform the grid
         $object = $example->svg->g[0]->line;
         for ($i = 0; $i < count($object); $i++) {
             $node = $object[$i];
+
+            //set the opacity of the vertical lines on 0 (trancparence)
+            //"remove" the vertical lines
             if (!empty($node) && $node['class'] == 'gridLine y') {
                 $node->addAttribute('opacity', '0');
+            }
+            if (!empty($node) && $node['class'] == 'gridLine y firstLine') {
+                $node->addAttribute('opacity', '0');
+            }
+
+            //set the horizontal lines grey
+            if (!empty($node) && $node['class'] == 'gridLine x' || $node['class'] == 'gridLine x firstLine') {
+                $node->addAttribute('opacity', '.2');
             }
         }
 
@@ -151,18 +165,27 @@ class PDFReportEnergy extends IPSModule
     {
         $data = $this->FetchData();
 
+        $title = strtoupper($this->Translate('Behave'));
+        $consum = sprintf($this->Translate('In %s you used up %s.'), $data[0], $data[1]);
+        $predictionText = $this->Translate('Expected usage based on your behavior:') . ' ' . $data[4];
+        $valueText = $this->Translate('Actual usage:') . ' ' . $data[1];
+        $consumText = $this->Translate("You could $data[6] your consumption by %s in the period");
+        $consumText2 = sprintf($consumText, $data[5]);
+
         $text =
         <<<EOT
-        <p>Im $data[0] haben Sie $data[1] kWh verbraucht. Im Vorjahr hatten Sie einen Verbrauch von $data[2] kWh.</p>
-        <h2>Verhalten</h2>
-        <hr/>
-        <h3>$data[0]:</h3>
+        <p> $consum </p>
+        </br></br>
+        <h2 style="font-weight: normal; font-size: 25px">$title</h2>
+        <hr style="height: 5px">
+        <br> </br>
+        <h3>$data[0]</h3>
             <p>
-            $data[3]
-            Erwarteter Verbrauch aufgrund ihres Verhaltens: $data[4] kWh <br>
-            Tatsächlicher Verbrauch: $data[1] kWh <br/>
+            $data[3] <br>
+            $predictionText <br>
+            $valueText <br/>
             <br>
-            Sie konnten Ihren Verbrauch um $data[5] % $data[6] im Zeitraum.<br/>
+            $consumText2<br/>
             </p>
         EOT;
 
@@ -188,7 +211,7 @@ class PDFReportEnergy extends IPSModule
         if (($temperatureID = $this->ReadPropertyInteger('TemperatureID')) != 0) {
             $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0)[0]['Avg'];
             $avgTemp = round($avgTemp, 1);
-            $avgTemp = 'Die Durchschnittstemperatur betrug: ' . $avgTemp . ' °C <br>';
+            $avgTemp = $this->Translate('Die Durchschnittstemperatur betrug: ') . GetValueFormattedEx($temperatureID, $avgTemp );
         } else {
             $avgTemp = '';
         }
@@ -199,9 +222,9 @@ class PDFReportEnergy extends IPSModule
         $percent = round(((1 - ($consum / $prediction)) * 100), 2);
 
         if ($percent <= 100) {
-            $percentText = 'senken';
+            $percentText = $this->Translate('redruce');
         } else {
-            $percentText = 'steigern';
+            $percentText = $this->Translate('raise');
         }
 
         if ($this->ReadPropertyInteger('CO2Type') != -1) {
@@ -209,6 +232,16 @@ class PDFReportEnergy extends IPSModule
         } else {
             $co2 = -1;
         }
+
+        //Formatted Values
+        if ($consumLastYear != 0) {
+            $consumLastYear = sprintf($this->Translate('Im Vorjahr hatten Sie einen Verbrauch von %s.'), GetValueFormattedEx($counterID, $consumLastYear));
+        } else {
+            $consumLastYear = '';
+        }
+        $prediction = GetValueFormattedEx($predictionID, $prediction);
+        $consum = GetValueFormattedEx($counterID, $consum);
+        $percent = $percent.'%';
 
         $data = [$month, $consum, $consumLastYear, $avgTemp, $prediction, $percent, $percentText, $co2];
 
