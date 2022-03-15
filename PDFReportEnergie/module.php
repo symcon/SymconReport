@@ -211,7 +211,7 @@ class PDFReportEnergy extends IPSModule
         if (($temperatureID = $this->ReadPropertyInteger('TemperatureID')) != 0) {
             $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0)[0]['Avg'];
             $avgTemp = round($avgTemp, 1);
-            $avgTemp = $this->Translate('Die Durchschnittstemperatur betrug: ') . GetValueFormattedEx($temperatureID, $avgTemp );
+            $avgTemp = $this->Translate('Die Durchschnittstemperatur betrug: ') . GetValueFormattedEx($temperatureID, $avgTemp);
         } else {
             $avgTemp = '';
         }
@@ -241,7 +241,7 @@ class PDFReportEnergy extends IPSModule
         }
         $prediction = GetValueFormattedEx($predictionID, $prediction);
         $consum = GetValueFormattedEx($counterID, $consum);
-        $percent = $percent.'%';
+        $percent = $percent . '%';
 
         $data = [$month, $consum, $consumLastYear, $avgTemp, $prediction, $percent, $percentText, $co2];
 

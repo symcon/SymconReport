@@ -34,9 +34,8 @@
             "Expected usage based on your behavior:": "Erwarteter Verbrauch aufgrund Ihres Verhaltens:",
             "Actual usage:": "Tatsächlicher Verbrauch:",
             "In %s you used up %s.": "Im %s haben Sie %s verbraucht.",
-            "You could redruce your consumption by %s in the period":"Sie konnten Ihren Verbrauch um  %s senken im Zeitraum.",
-            "You could raise your consumption by %s in the period":"Sie konnten Ihren Verbrauch um  %s steigern im Zeitraum."
-
+            "You could redruce your consumption by %s in the period": "Sie konnten Ihren Verbrauch um  %s senken im Zeitraum.",
+            "You could raise your consumption by %s in the period": "Sie konnten Ihren Verbrauch um  %s steigern im Zeitraum."
         }
     }
 }
