@@ -67,15 +67,14 @@ class PDFReportEnergy extends IPSModule
         $pdf->setFooterFont([PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA]);
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP - 15, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP - 5, PDF_MARGIN_RIGHT);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
 
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-        $pdf->SetFont('dejavusans', '', 10);
+        $pdf->SetFont('dejavusans');
 
         $pdf->AddPage();
 
@@ -83,16 +82,13 @@ class PDFReportEnergy extends IPSModule
         //Header
         $pdf->writeHTML($this->GenerateHTMLHeader(), true, false, true, false, '');
 
-        //Diagramme
+        //Charts
         if ($this->ReadPropertyInteger('TemperatureID') != 0) {
-            $svg = $this->GenerateDiagramme($this->ReadPropertyInteger('TemperatureID'));
+            $svg = $this->GenerateCharts($this->ReadPropertyInteger('TemperatureID'));
             $pdf->ImageSVG('@' . $svg, $x = 105, $y = '', $w = 90, $h = '', $link = '', $align = 5, $palign = 5, $border = 0, $fitonpage = true);
-            $x = 10;
-        } else {
-            $x = '';
         }
-        $svg = $this->GenerateDiagramme($this->ReadPropertyInteger('CounterID'));
-        $pdf->ImageSVG('@' . $svg, $x, $pdf->GetY(), $w = 90, $h = '', $link = '', $align = '', $palign = '', $border = 0, $fitonpage = true);
+        $svg = $this->GenerateCharts($this->ReadPropertyInteger('CounterID'));
+        $pdf->ImageSVG('@' . $svg, $x = 10, $pdf->GetY(), $w = 90, $h = '', $link = '', $align = '', $palign = '', $border = 0, $fitonpage = true);
 
         //reset Y
         $pdf->setY($pdf->getY() + 70);
@@ -108,7 +104,7 @@ class PDFReportEnergy extends IPSModule
     {
         $date = $this->Translate(date('F', strtotime('-1 month'))) . ' ' . date('Y');
         $energy = $this->Translate('Your') . ' ' . $this->ReadPropertyString('EnergyType') . $this->Translate(' behaviour');
-        $title = $this->Translate('The Behaviour');
+        $title = strtoupper($this->Translate('The Behaviour'));
         $logo = $this->ReadPropertyString('LogoData');
 
         return <<<EOT
@@ -117,7 +113,7 @@ class PDFReportEnergy extends IPSModule
             <td>
                 <br/><br/><br/>
                 $date<br/>
-                $energy<hr/>
+                $energy<br/><hr/>
                 <h1>$title </h1>
             </td>
             <td width="50%" align="right"><img src="@$logo"></td>
@@ -126,27 +122,29 @@ class PDFReportEnergy extends IPSModule
         EOT;
     }
 
-    private function GenerateDiagramme(int $id)
+    private function GenerateCharts(int $id)
     {
-        $timeSpan = strtotime('first day of this month') - strtotime('first day of last month');
+        $chart = '<meta xmlns:sym="symcon">' . AC_RenderChart(IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0], $id, strtotime('first day of last month 00:00:00'), 3, 0, false, false, 800, 500) . '</meta>';
+        $example = simplexml_load_string($chart);
 
-        $chart = AC_RenderChart(IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0], $id, strtotime('first day of last month 00:00:00'), 3, 0, false, false, 800, 500);
-
-        $chartChange = substr($chart, 0, strpos($chart, '<line'));
-        $offset = strpos($chart, '</line>') + 7;
-
-        while (strpos($chart, '<line', $offset) !== false) {
-            $startpos = strpos($chart, '<line', $offset);
-            $offset = strpos($chart, '</line>', $startpos) + 7;
-
-            $length = $offset - $startpos; // length ist das Problem
-            $substring = substr($chart, $startpos, $length);
-            if (strpos($substring, 'gridLine y') === false) {
-                $chartChange .= $substring;
+        //add text-anchor
+        foreach ($example->svg->g as $object) {
+            if ($object['class'] == 'y axis') {
+                $object->g->addAttribute('text-anchor', 'end');
             }
         }
-        $chartChange .= substr($chart, $offset);
-        return $chartChange;
+
+        //set the opacity of the vertical lines on 0 (trancparence)
+        //"remove" the vertical lines
+        $object = $example->svg->g[0]->line;
+        for ($i = 0; $i < count($object); $i++) {
+            $node = $object[$i];
+            if (!empty($node) && $node['class'] == 'gridLine y') {
+                $node->addAttribute('opacity', '0');
+            }
+        }
+
+        return $example->asXML();
     }
 
     private function GenerateHTMLText()
@@ -157,14 +155,14 @@ class PDFReportEnergy extends IPSModule
         <<<EOT
         <p>Im $data[0] haben Sie $data[1] kWh verbraucht. Im Vorjahr hatten Sie einen Verbrauch von $data[2] kWh.</p>
         <h2>Verhalten</h2>
-        <hr>
+        <hr/>
         <h3>$data[0]:</h3>
             <p>
             $data[3]
             Erwarteter Verbrauch aufgrund ihres Verhaltens: $data[4] kWh <br>
-            Tatsächlicher Verbrauch: $data[1] kWh <br>
-
-            Sie konnten Ihren Verbrauch um $data[5] % $data[6] im Zeitraum.
+            Tatsächlicher Verbrauch: $data[1] kWh <br/>
+            <br>
+            Sie konnten Ihren Verbrauch um $data[5] % $data[6] im Zeitraum.<br/>
             </p>
         EOT;
 
@@ -177,8 +175,8 @@ class PDFReportEnergy extends IPSModule
     private function FetchData()
     {
         $archivID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-        $startTime = strtotime('first day of last month');
-        $endTime = strtotime('first day of this month');
+        $startTime = strtotime('first day of last month 00:00:00');
+        $endTime = strtotime('first day of this month 00:00:00');
 
         $counterID = $this->ReadPropertyInteger('CounterID');
 
@@ -189,6 +187,7 @@ class PDFReportEnergy extends IPSModule
 
         if (($temperatureID = $this->ReadPropertyInteger('TemperatureID')) != 0) {
             $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0)[0]['Avg'];
+            $avgTemp = round($avgTemp, 1);
             $avgTemp = 'Die Durchschnittstemperatur betrug: ' . $avgTemp . ' °C <br>';
         } else {
             $avgTemp = '';
@@ -197,7 +196,7 @@ class PDFReportEnergy extends IPSModule
         $predictionID = $this->ReadPropertyInteger('PredictionID');
         $prediction = GetValue($predictionID);
 
-        $percent = ($consum / $prediction) * 100;
+        $percent = round(((1 - ($consum / $prediction)) * 100), 2);
 
         if ($percent <= 100) {
             $percentText = 'senken';
