@@ -38,7 +38,7 @@ Logo             | Auswählbare Grafik als PNG
 Verbrauchsart    | Freitext welcher unterhalb des Datums steht
 Verbrauchszähler | Als Zähler geloggte Variable
 Temperatur       | (optional) geloggte Variable
-Vorhersage       | Variable, welche den Verbrauch aufgrund des Verhaltens vorhersagen kann
+Vorhersage       | Variable, welche den Verbrauch aufgrund des Verhaltens vorhersagen kann, zum Beispiel aus dem Modul [Verbrauchsverhalten](https://github.com/symcon/Verbrauchsverhalten)
 CO2 Typ          | (optional) CO2 Equivalent für die Verbrauchsart
 
 
@@ -54,7 +54,7 @@ Die PDF wird als "Report (PDF)" generiert.
 
 Name         | Typ    | Beschreibung
 ------------ | ------ | ----------------
-Report (PDF) | Medien | Erstellte PDF, welche über das WebFront heruntergeladen werden kann.
+Report (PDF) | Medien | Erstellte PDF, welche über das WebFront heruntergeladen oder per E-Mail verschickt werden kann.
 
 
 ##### Profile:

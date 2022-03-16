@@ -14,7 +14,7 @@
         },
         {
             "type": "SelectVariable",
-            "caption": "Consume counter",
+            "caption": "Consumption meter",
             "name": "CounterID",
             "requireLogging": 4
         },

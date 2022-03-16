@@ -57,7 +57,7 @@ Die PDF wird als "Report (PDF)" generiert.
 
 Name         | Typ    | Beschreibung
 ------------ | ------ | ----------------
-Report (PDF) | Medien | Erstellte PDF, welche über das WebFront heruntergeladen werden kann.
+Report (PDF) | Medien | Erstellte PDF, welche über das WebFront heruntergeladen oder per E-Mail verschickt werden kann.
 
 
 ##### Profile:

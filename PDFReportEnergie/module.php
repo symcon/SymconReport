@@ -104,7 +104,7 @@ class PDFReportEnergy extends IPSModule
     {
         $date = strtoupper($this->Translate(date('F', strtotime('-1 month'))) . ' ' . date('Y'));
         $energy = strtoupper($this->Translate('Your') . ' ' . $this->ReadPropertyString('EnergyType') . $this->Translate(' consumption'));
-        $title = strtoupper($this->Translate('The consumption'));
+        $title = strtoupper($this->Translate('Consumption'));
         $logo = $this->ReadPropertyString('LogoData');
 
         return <<<EOT
@@ -166,31 +166,31 @@ class PDFReportEnergy extends IPSModule
         $data = $this->FetchData();
 
         $title = strtoupper($this->Translate('Behave'));
-        $consum = sprintf($this->Translate('In %s you used up %s.'), $data[0], $data[1]);
-        $predictionText = $this->Translate('Expected usage based on your behavior:') . ' ' . $data[4];
-        $valueText = $this->Translate('Actual usage:') . ' ' . $data[1];
-        $consumText = $this->Translate("You could $data[6] your consumption by %s in the period");
-        $consumText2 = sprintf($consumText, $data[5]);
+        $consumption = sprintf($this->Translate('In %s you used up %s.'), $data['month'], $data['consumption']);
+        $predictionText = $this->Translate('Expected usage based on your behavior') . ': ' . $data['prediction'];
+        $valueText = $this->Translate('Actual usage') . ': ' . $data['consumption'];
+        $consumptionText = $this->Translate("You could $data[percentText] your consumption by %s in the period");
+        $consumptionText2 = sprintf($consumptionText, $data['percent']);
 
         $text =
         <<<EOT
-        <p> $consum </p>
+        <p> $consumption </p>
         </br></br>
         <h2 style="font-weight: normal; font-size: 25px">$title</h2>
         <hr style="height: 5px">
         <br> </br>
-        <h3>$data[0]</h3>
+        <h3>$data[month]</h3>
             <p>
-            $data[3] <br>
+            $data[avgTemp] <br>
             $predictionText <br>
             $valueText <br/>
             <br>
-            $consumText2<br/>
+            $consumptionText2<br/>
             </p>
         EOT;
 
-        if ($data[7] != -1) {
-            $text .= "<h3>CO2 Emmisionen</h3> <p>$data[7] kg</p>";
+        if ($data['co2'] > 0) {
+            $text .= "<h3>CO2 Emmisionen</h3> <p>$data[co2] kg</p>";
         }
         return $text;
     }
@@ -205,13 +205,13 @@ class PDFReportEnergy extends IPSModule
 
         $month = $this->Translate(date('F', $startTime));
 
-        $consum = AC_GetAggregatedValues($archivID, $counterID, 3, $startTime, $endTime, 0)[0]['Avg'];
-        $consumLastYear = AC_GetAggregatedValues($archivID, $counterID, 3, strtotime('-1 year', $startTime), strtotime('-1 year', $endTime), 0)[0]['Avg'];
+        $consumption = AC_GetAggregatedValues($archivID, $counterID, 3, $startTime, $endTime, 0)[0]['Avg'];
+        $consumptionLastYear = AC_GetAggregatedValues($archivID, $counterID, 3, strtotime('-1 year', $startTime), strtotime('-1 year', $endTime), 0)[0]['Avg'];
 
         if (($temperatureID = $this->ReadPropertyInteger('TemperatureID')) != 0) {
             $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0)[0]['Avg'];
             $avgTemp = round($avgTemp, 1);
-            $avgTemp = $this->Translate('Die Durchschnittstemperatur betrug: ') . GetValueFormattedEx($temperatureID, $avgTemp);
+            $avgTemp = $this->Translate('The average temperature was') . ': ' . GetValueFormattedEx($temperatureID, $avgTemp);
         } else {
             $avgTemp = '';
         }
@@ -219,7 +219,7 @@ class PDFReportEnergy extends IPSModule
         $predictionID = $this->ReadPropertyInteger('PredictionID');
         $prediction = GetValue($predictionID);
 
-        $percent = round(((1 - ($consum / $prediction)) * 100), 2);
+        $percent = round(((1 - ($consumption / $prediction)) * 100), 2);
 
         if ($percent <= 100) {
             $percentText = $this->Translate('redruce');
@@ -227,23 +227,28 @@ class PDFReportEnergy extends IPSModule
             $percentText = $this->Translate('raise');
         }
 
-        if ($this->ReadPropertyInteger('CO2Type') != -1) {
-            $co2 = $consum * $this->ReadPropertyInteger('CO2Type');
-        } else {
-            $co2 = -1;
-        }
+        $co2 = $consumption * $this->ReadPropertyInteger('CO2Type');
 
         //Formatted Values
-        if ($consumLastYear != 0) {
-            $consumLastYear = sprintf($this->Translate('Im Vorjahr hatten Sie einen Verbrauch von %s.'), GetValueFormattedEx($counterID, $consumLastYear));
+        if ($consumptionLastYear != 0) {
+            $consumptionLastYear = sprintf($this->Translate('Im Vorjahr hatten Sie einen Verbrauch von %s.'), GetValueFormattedEx($counterID, $consumLastYear));
         } else {
-            $consumLastYear = '';
+            $consumptionLastYear = '';
         }
         $prediction = GetValueFormattedEx($predictionID, $prediction);
-        $consum = GetValueFormattedEx($counterID, $consum);
+        $consumption = GetValueFormattedEx($counterID, $consumption);
         $percent = $percent . '%';
 
-        $data = [$month, $consum, $consumLastYear, $avgTemp, $prediction, $percent, $percentText, $co2];
+        $data = [
+            'month'               => $month,
+            'consumption'         => $consumption,
+            'consumptionLastYear' => $consumptionLastYear,
+            'avgTemp'             => $avgTemp,
+            'prediction'          => $prediction,
+            'percent'             => $percent,
+            'percentText'         => $percentText,
+            'co2'                 => $co2
+        ];
 
         return $data;
     }
