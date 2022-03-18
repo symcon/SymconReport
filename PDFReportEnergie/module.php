@@ -264,7 +264,6 @@ class PDFReportEnergy extends IPSModule
             $prediction = GetValue($predictionID);
 
             $percent = 100 - round(($consumption / $prediction) * 100, 2);
-            echo $percent;
 
             if ($percent >= 0) {
                 $percentText = $this->Translate('redruce');
