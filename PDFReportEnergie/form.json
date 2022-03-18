@@ -1,9 +1,16 @@
 {
+    "status": [
+        {
+            "code": 200,
+            "icon": "error",
+            "caption": "The Counter has no data for last month"
+        }
+    ],
     "elements": [
         {
             "type": "SelectFile",
             "caption": "Logo",
-            "extension": ".png",
+            "extensions": ".png, .svg",
             "name": "LogoData"
         },
         {
@@ -65,7 +72,7 @@
         {
             "type": "Button",
             "caption": "Generate PDF",
-            "onClick": "if(RAC_GenerateEnergyReport($id)) { \n echo (new IPSModule($id))->Translate('Done! Please open the media file beneath this instance!'); \n };"
+            "onClick": "if(RAC_GenerateEnergyReport($id)) { \n echo (new IPSModule($id))->Translate('Done! Please open the media file beneath this instance!'); \n }else{echo (new IPSModule($id))->Translate('Fail! Something is wrong');};"
         }
     ]
 }
