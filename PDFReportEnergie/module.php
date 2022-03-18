@@ -232,7 +232,7 @@ class PDFReportEnergy extends IPSModule
 
         //Consumption last month
         $counterID = $this->ReadPropertyInteger('CounterID');
-        $consumption = AC_GetAggregatedValues($archivID, $counterID, 3, $startTime, $endTime, 0);
+        $consumption = AC_GetAggregatedValues($archivID, $counterID, 3, $startTime, $endTime - 1, 0);
         if (count($consumption) != 0) {
             $consumption = $consumption[0]['Avg'];
             $this->SetStatus(102);
@@ -263,13 +263,15 @@ class PDFReportEnergy extends IPSModule
         if ($predictionID != 0) {
             $prediction = GetValue($predictionID);
 
-            $percent = round((($consumption / $prediction) * 100), 2);
+            $percent = 100 - round(($consumption / $prediction) * 100, 2);
+            echo $percent;
 
-            if ($percent <= 100) {
+            if ($percent >= 0) {
                 $percentText = $this->Translate('redruce');
             } else {
                 $percentText = $this->Translate('raise');
             }
+            $percent = abs($percent);
 
             $percent = $percent . '%';
             $prediction = GetValueFormattedEx($predictionID, $prediction);
@@ -279,7 +281,7 @@ class PDFReportEnergy extends IPSModule
             $percentText = '';
         }
 
-        $co2 = $consumption * $this->ReadPropertyInteger('CO2Type');
+        $co2 = ($consumption * $this->ReadPropertyInteger('CO2Type')) / 1000;
 
         if ($consumptionLastYear !== false) {
             $consumptionLastYear = sprintf($this->Translate('Im Vorjahr hatten Sie einen Verbrauch von %s.'), GetValueFormattedEx($counterID, $consumptionLastYear));
