@@ -21,15 +21,15 @@
         },
         {
             "type": "SelectVariable",
-            "caption": "Consumption meter",
-            "name": "CounterID",
-            "requireLogging": 4
+            "caption": "Outside temperature variable",
+            "name": "TemperatureID",
+            "requireLogging": 1
         },
         {
             "type": "SelectVariable",
-            "caption": "Temperature",
-            "name": "TemperatureID",
-            "requireLogging": 1
+            "caption": "Consumption meter variable",
+            "name": "CounterID",
+            "requireLogging": 4
         },
         {
             "type": "SelectVariable",

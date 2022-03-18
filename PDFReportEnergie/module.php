@@ -232,7 +232,7 @@ class PDFReportEnergy extends IPSModule
 
         //Consumption last month
         $counterID = $this->ReadPropertyInteger('CounterID');
-        $consumption = AC_GetAggregatedValues($archivID, $counterID, 3, $startTime, $endTime - 1, 0);
+        $consumption = AC_GetAggregatedValues($archivID, $counterID, 3, $startTime, $endTime - 1, 1);
         if (count($consumption) != 0) {
             $consumption = $consumption[0]['Avg'];
             $this->SetStatus(102);
@@ -241,7 +241,7 @@ class PDFReportEnergy extends IPSModule
             return [];
         }
         //Consumption last Year
-        $consumptionLastYear = AC_GetAggregatedValues($archivID, $counterID, 3, strtotime('first day of last year 00:00:00', $startTime), strtotime('first day of this year 00:00:00', $endTime), 1);
+        $consumptionLastYear = AC_GetAggregatedValues($archivID, $counterID, 3, strtotime('-12 month', $startTime), strtotime('-12 month', $endTime) - 1, 1);
         if (count($consumptionLastYear) != 0) {
             $consumptionLastYear = $consumptionLastYear[0]['Avg'];
         } else {
@@ -250,12 +250,14 @@ class PDFReportEnergy extends IPSModule
 
         //Average Temperature
         $temperatureID = $this->ReadPropertyInteger('TemperatureID');
-        if ($temperatureID != 0) {
-            $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0)[0]['Avg'];
+        $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0);
+        if (count($avgTemp) != 0) {
+            $avgTemp = $avgTemp[0]['Avg'];
             $avgTemp = round($avgTemp, 1);
             $avgTemp = $this->Translate('The average temperature was') . ': ' . GetValueFormattedEx($temperatureID, $avgTemp);
         } else {
-            $avgTemp = '';
+            $this->setStatus(200);
+            return [];
         }
 
         //Prediction and Prozent
