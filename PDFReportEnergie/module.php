@@ -77,6 +77,7 @@ class PDFReportEnergy extends IPSModule
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
 
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->setPrintFooter(false);
 
         $pdf->SetFont('dejavusans');
 
