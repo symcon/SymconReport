@@ -48,12 +48,12 @@ class PDFReportEnergy extends IPSModule
 
         $pdfContent = $this->GeneratePDF('IP-Symcon ' . IPS_GetKernelVersion(), 'report.pdf');
 
-        $mediaID = $this->GetIDForIdent('ReportPDF');
-        IPS_SetMediaContent($mediaID, base64_encode($pdfContent));
-
-        if ($this->GetStatus() > 199) {
+        if ($this->GetStatus() >= IS_EBASE) {
             return false;
         }
+
+        $mediaID = $this->GetIDForIdent('ReportPDF');
+        IPS_SetMediaContent($mediaID, base64_encode($pdfContent));
 
         return true;
     }
@@ -253,7 +253,6 @@ class PDFReportEnergy extends IPSModule
         $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0);
         if (count($avgTemp) != 0) {
             $avgTemp = $avgTemp[0]['Avg'];
-            $avgTemp = round($avgTemp, 1);
             $avgTemp = $this->Translate('The average temperature was') . ': ' . GetValueFormattedEx($temperatureID, $avgTemp);
         } else {
             $this->setStatus(200);
@@ -268,7 +267,7 @@ class PDFReportEnergy extends IPSModule
             $percent = 100 - round(($consumption / $prediction) * 100, 2);
 
             if ($percent >= 0) {
-                $percentText = $this->Translate('redruce');
+                $percentText = $this->Translate('reduce');
             } else {
                 $percentText = $this->Translate('raise');
             }

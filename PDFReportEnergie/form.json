@@ -33,7 +33,7 @@
         },
         {
             "type": "SelectVariable",
-            "caption": "Prediction",
+            "caption": "Prediction variable (optional)",
             "name": "PredictionID"
         },
         {
