@@ -148,8 +148,20 @@ class PDFReportEnergy extends IPSModule
         }
 
         //fill the bars
-        $object = $example->svg->g[3]->g[1];
-        $object->addAttribute('fill', 'yellowgreen');
+        $object = $example->svg;
+        if ($object['class'] == 'bar') {
+            $object = $example->svg->g[3]->g[1];
+            $object->addAttribute('fill', 'yellowgreen');
+        } else {
+            //svg -> graphs -> outline
+            $object = $example->svg->g[3]->g[1]->g;
+            $object->addAttribute('stroke', 'black');
+            $object->addAttribute('fill', 'none');
+
+            // svg -> graphs -> background
+            $object = $example->svg->g[3]->g[0]->g;
+            $object->addAttribute('opacity', '0');
+        }
 
         //transform the grid
         $object = $example->svg->g[0]->line;
