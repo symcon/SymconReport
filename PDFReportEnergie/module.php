@@ -106,7 +106,7 @@ class PDFReportEnergy extends IPSModule
         $pdf->ImageSVG('@' . $svg, $x = 10, $pdf->GetY(), $w = 90, $h = '', $link = '', $align = '', $palign = '', $border = 0, $fitonpage = true);
 
         //reset Y
-        $pdf->setY($pdf->getY() + 70);
+        $pdf->setY($pdf->getY() + 62);
 
         //text
         $pdf->writeHTML($this->GenerateHTMLText(), true, false, true, false, '');
@@ -195,7 +195,10 @@ class PDFReportEnergy extends IPSModule
         }
 
         $title = strtoupper($this->Translate('Behave'));
-        $consumption = sprintf($this->Translate('In %s you used up %s.'), $data['month'], $data['consumption']) . ' <br> ';
+        $consumption = sprintf($this->Translate('In %s you used up %s.'), $data['month'], $data['consumption']) . ' ';
+        if ($data['consumptionLastYear'] !== false) {
+            $consumption .= $data['consumptionLastYear'];
+        }
 
         if ($data['prediction'] != '') {
             $predictionText = $this->Translate('Expected usage based on your behavior') . ': ' . $data['prediction'] . ' <br> ';
@@ -215,8 +218,8 @@ class PDFReportEnergy extends IPSModule
 
         $text =
         <<<EOT
-        <p> $consumption </p>
-        </br></br>
+        <p>$consumption </p>
+        <br>
         <h2 style="font-weight: normal; font-size: 25px">$title</h2>
         <hr style="height: 5px">
         <br> </br>
@@ -225,12 +228,24 @@ class PDFReportEnergy extends IPSModule
             $data[avgTemp] <br>
             $predictionText 
             $valueText 
-            $consumptionText2<br>
+            $consumptionText2
             </p>
         EOT;
 
+        $comparison = $this->Translate('For Comparison');
+        $co2text = $this->Translate('A tree bind each month ca. 1 kg CO².<br>In order to achieve the 2030 climate targets, the total energy consumption for heating and hot water must be reduced by <br>5.5% per year.<br>Your personal footprint can be found <a href = "uba.co2-rechner.de" >here </a> calculate.');
+
         if ($data['co2'] > 0) {
-            $text .= "<h3>CO2 Emmisionen</h3> <p>$data[co2] kg</p>";
+            $text .=
+            <<<EOT
+            <h3>CO² Emmisionen</h3> 
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                    <td width="20%"><p>    $data[co2] kg</p></td>
+                    <td width="80%"><h4>$comparison</h4><p>$co2text</p></td>
+                </tr>
+            </table>
+            EOT;
         }
         return $text;
     }

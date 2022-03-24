@@ -3,3 +3,4 @@
 libs/vendor/tecnickcom/tcpdf/fonts
 composer.phar
 .php_cs.cache
+.phpunit.result.*

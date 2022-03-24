@@ -39,7 +39,11 @@
             "You could raise your consumption by %s in the period": "Sie haben in diesen Zeitraum Ihren Verbrauch um %s gesteigert.",
             "The average temperature was": "Die Durchschnittstemperatur betrug",
             "Fail! Something is wrong": "Gescheitert! Etwas lief falsch",
-            "The Counter has no data for last month": "Die Zählervariable hat keine Daten für den letzten Monat"
+            "The Counter has no data for last month": "Die Zählervariable hat keine Daten für den letzten Monat",
+            "For Comparison": "Zum Vergleich",
+            "A tree bind each month ca. 1 kg CO².<br>In order to achieve the 2030 climate targets, the total energy consumption for heating and hot water must be reduced by <br>5.5% per year.<br>Your personal footprint can be found <a href = \"uba.co2-rechner.de\" >here </a> calculate.": "Ein Baum bindet pro Monat ca. 1 kg CO².<br>Um die Klimaziele 2030 zu erreichen, muss der gesamte Energieverbrauch für Heizung und Warmwasser pro Jahr<br>um 5,5 % sinken.<br>Ihr persönlicher Fußabdruck können Sie <a href = \"uba.co2-rechner.de\" >hier</a> ausrechnen.",
+            "Last year you used up %s.": "Im Vorjahr hatten sie einen Verbrauch von %s."
+
         }
     }
 }
