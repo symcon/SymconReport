@@ -1,0 +1,78 @@
+{
+    "status": [
+        {
+            "code": 200,
+            "icon": "error",
+            "caption": "The Counter has no data for last month"
+        }
+    ],
+    "elements": [
+        {
+            "type": "SelectFile",
+            "caption": "Logo",
+            "extensions": ".png, .svg",
+            "name": "LogoData"
+        },
+        {
+            "type": "ValidationTextBox",
+            "caption": "Energy Type",
+            "name": "EnergyType",
+            "value": "Gas"
+        },
+        {
+            "type": "SelectVariable",
+            "caption": "Outside temperature variable",
+            "name": "TemperatureID",
+            "requireLogging": 1
+        },
+        {
+            "type": "SelectVariable",
+            "caption": "Consumption meter variable",
+            "name": "CounterID",
+            "requireLogging": 4
+        },
+        {
+            "type": "SelectVariable",
+            "caption": "Prediction variable (optional)",
+            "name": "PredictionID"
+        },
+        {
+            "type": "Select",
+            "name": "CO2Type",
+            "caption": "CO2 Type",
+            "options": [
+                {
+                    "caption": "Inactive",
+                    "value": -1
+                },
+                {
+                    "caption": "Powermix",
+                    "value": 489
+                },
+                {
+                    "caption": "Displacement power mix",
+                    "value": 624
+                },
+                {
+                    "caption": "Natural gas",
+                    "value": 239
+                },
+                {
+                    "caption": "Fuel oil",
+                    "value": 307
+                },
+                {
+                    "caption": "Pellets",
+                    "value": 71
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "Button",
+            "caption": "Generate PDF",
+            "onClick": "if(RAC_GenerateEnergyReport($id)) { \n echo (new IPSModule($id))->Translate('Done! Please open the media file beneath this instance!'); \n }else{echo (new IPSModule($id))->Translate('Fail! Something is wrong');};"
+        }
+    ]
+}

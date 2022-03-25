@@ -1,5 +1,5 @@
 # PDF Report
-Dieses Modul bietet die Funktion Archivwerte als Bericht in einer PDF zusammenzufassen. 
+Dieses Modul bietet die Funktion die Archivwerte zweier Variablen als Graphen dazustellen, und ausgewählte Angabe als PDF für den vergangenen Monat bereitzustellen. 
 
 ### Inhaltsverzeichnis
 
@@ -16,8 +16,6 @@ Dieses Modul bietet die Funktion Archivwerte als Bericht in einer PDF zusammenzu
 * Ermöglicht das Erstellen und Download von erstellter PDF.
 * Einstellung via Instanzkonfiguration
 * Logoauswahl für Header ist möglich
-* Einstellbare Anzahl Datensätze, Aggregationsstärke, Min- und Max-Werte der ausgewählten Variablen
-
 
 ### 2. Voraussetzungen
 
@@ -34,16 +32,15 @@ Dieses Modul bietet die Funktion Archivwerte als Bericht in einer PDF zusammenzu
 
 __Konfigurationsseite__:
 
-Name                    | Beschreibung
------------------------ | ---------------------------------
-Logo                    | Auswählbare Grafik als PNG
-Firma                   | Firmenname
-Title                   | Titel der PDF
-Fußzeile                | Fußzeile
-Datenquelle             | Mehrere Variablen aus der die Datensätze pro Spalte erstellt werden
-Aggregation             | Definiert Aggregationsstufe der aufgelisteten Datensätze (Stunde - Jahr)
-Anzahl                  | Anzahl der aufgelisteten Datensätze
-Datensatz überspringen  | Ist diese Option aktiviert, wird der aktuellste unvollständige Datensatz verworfen 
+Name             | Beschreibung
+---------------- | ---------------------------------
+Logo             | Auswählbare Grafik als PNG
+Verbrauchsart    | Freitext welcher unterhalb des Datums steht
+Verbrauchszähler | Als Zähler geloggte Variable
+Temperatur       | (optional) geloggte Variable
+Vorhersage       | Variable, welche den Verbrauch aufgrund des Verhaltens vorhersagen kann, zum Beispiel aus dem Modul [Verbrauchsverhalten](https://github.com/symcon/Verbrauchsverhalten)
+CO2 Typ          | (optional) CO2 Equivalent für die Verbrauchsart
+
 
 __Beispiel Dokument__
 ![Beispiel](example.png)
@@ -70,9 +67,9 @@ Es werden keine zusätzlichen Profile erstellt.
 
 ### 7. PHP-Befehlsreferenz
 
-`boolean RAC_GenerateReport(integer $InstanzID);`  
+`boolean RAC_GenerateEnergyReport(integer $InstanzID);`  
 Generiert ein PDF mit den im Modul mit der InstanzID $InstanzID angegebenen Werten. Die PDF steht dann als Mediendatei zur Verfügung.  
 Wenn bereits eine Datei existiert, wird diese aktualisiert.
 Die Funktion liefert keinerlei Rückgabewert.  
 Beispiel:  
-`RAC_GenerateReport(12345);`
+`RAC_GenerateEnergyReport(12345);`
