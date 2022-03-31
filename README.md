@@ -12,7 +12,7 @@ Folgende Module beinhaltet das SymconReport Repository:
 - __PDFReport (Multi)__ ([Dokumentation](PDFReportMulti)  
     Erstellt einen Report von Archivwerten mehrerer Variablen einer Zeitspanne als PDF
 
-- __PDFReport (Energie)__([Dokumentation](PDFReportEnergie))  
+- __PDFReport (Energie)__ ([Dokumentation](PDFReportEnergie))  
     Erstellt ein Report von Archivwerten zweier Variablen einer Zeitspanne als PDF
 
 - __MailReport__ ([Dokumentation](MailReport))  
