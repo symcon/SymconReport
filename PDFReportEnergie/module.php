@@ -287,8 +287,8 @@ class PDFReportEnergy extends IPSModule
                 $this->setStatus(200);
                 return [];
             }
-        }else{
-            $avgTemp ='';
+        } else {
+            $avgTemp = '';
         }
 
         //Prediction and Prozent
