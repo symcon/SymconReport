@@ -21,7 +21,7 @@
         },
         {
             "type": "SelectVariable",
-            "caption": "Outside temperature variable",
+            "caption": "Outside temperature variable (optional)",
             "name": "TemperatureID",
             "requireLogging": 1
         },

@@ -5,7 +5,7 @@
             "Logo": "Logo",
             "Energy Type": "Verbrauchsart",
             "Consumption meter variable": "Variable für Verbrauchszähler",
-            "Outside temperature variable": "Variable für Außentemperatur",
+            "Outside temperature variable (optional)": "Variable für Außentemperatur (optional)",
             "Prediction variable (optional)": "Variable für Verbrauchsvorhersage (optional)",
             "CO2 Type": "CO2 Typ",
             "Inactive": "Inaktiv",

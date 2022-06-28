@@ -13,9 +13,9 @@ class PDFReportEnergy extends IPSModule
 
         $this->RegisterPropertyString('LogoData', '');
         $this->RegisterPropertyString('EnergyType', 'Gas');
-        $this->RegisterPropertyInteger('CounterID', 0);
-        $this->RegisterPropertyInteger('TemperatureID', 0);
-        $this->RegisterPropertyInteger('PredictionID', 0);
+        $this->RegisterPropertyInteger('CounterID', 1);
+        $this->RegisterPropertyInteger('TemperatureID', 1);
+        $this->RegisterPropertyInteger('PredictionID', 1);
         $this->RegisterPropertyInteger('CO2Type', -1);
 
         $this->RegisterMediaDocument('ReportPDF', $this->Translate('Report (PDF)'), 'pdf');
@@ -41,7 +41,7 @@ class PDFReportEnergy extends IPSModule
 
     public function GenerateEnergyReport()
     {
-        if ($this->ReadPropertyInteger('CounterID') == 0 || $this->ReadPropertyInteger('TemperatureID') == 0) {
+        if ($this->ReadPropertyInteger('CounterID') < 10000) {
             echo $this->Translate('Selected variable is not a valid variable!');
             return false;
         }
@@ -98,7 +98,7 @@ class PDFReportEnergy extends IPSModule
         $pdf->writeHTML($this->GenerateHTMLHeader($logo), true, false, true, false, '');
 
         //Charts
-        if ($this->ReadPropertyInteger('TemperatureID') != 0) {
+        if ($this->ReadPropertyInteger('TemperatureID') >= 10000) {
             $svg = $this->GenerateCharts($this->ReadPropertyInteger('TemperatureID'));
             $pdf->ImageSVG('@' . $svg, $x = 105, $y = '', $w = 90, $h = '', $link = '', $align = 5, $palign = 5, $border = 0, $fitonpage = true);
         }
@@ -278,18 +278,22 @@ class PDFReportEnergy extends IPSModule
 
         //Average Temperature
         $temperatureID = $this->ReadPropertyInteger('TemperatureID');
-        $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0);
-        if (count($avgTemp) != 0) {
-            $avgTemp = $avgTemp[0]['Avg'];
-            $avgTemp = $this->Translate('The average temperature was') . ': ' . GetValueFormattedEx($temperatureID, $avgTemp);
-        } else {
-            $this->setStatus(200);
-            return [];
+        if ($temperatureID >= 10000) {
+            $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0);
+            if (count($avgTemp) != 0) {
+                $avgTemp = $avgTemp[0]['Avg'];
+                $avgTemp = $this->Translate('The average temperature was') . ': ' . GetValueFormattedEx($temperatureID, $avgTemp);
+            } else {
+                $this->setStatus(200);
+                return [];
+            }
+        }else{
+            $avgTemp ='';
         }
 
         //Prediction and Prozent
         $predictionID = $this->ReadPropertyInteger('PredictionID');
-        if ($predictionID != 0) {
+        if ($predictionID >= 10000) {
             $prediction = GetValue($predictionID);
 
             $percent = 100 - round(($consumption / $prediction) * 100, 2);
