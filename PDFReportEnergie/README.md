@@ -34,11 +34,11 @@ __Konfigurationsseite__:
 
 Name             | Beschreibung
 ---------------- | ---------------------------------
-Logo             | Auswählbare Grafik als PNG
+Logo             | (optional) Auswählbare Grafik als PNG
 Verbrauchsart    | Freitext welcher unterhalb des Datums steht
 Verbrauchszähler | Als Zähler geloggte Variable
 Temperatur       | (optional) geloggte Variable
-Vorhersage       | Variable, welche den Verbrauch aufgrund des Verhaltens vorhersagen kann, zum Beispiel aus dem Modul [Verbrauchsverhalten](https://github.com/symcon/Verbrauchsverhalten)
+Vorhersage       | (optional) Variable, welche den Verbrauch aufgrund des Verhaltens vorhersagen kann, zum Beispiel aus dem Modul [Verbrauchsverhalten](https://github.com/symcon/Verbrauchsverhalten)
 CO2 Typ          | (optional) CO2 Equivalent für die Verbrauchsart
 
 
