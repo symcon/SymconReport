@@ -41,7 +41,7 @@ class PDFReportEnergy extends IPSModule
 
     public function GenerateEnergyReport()
     {
-        if ($this->ReadPropertyInteger('CounterID') < 10000) {
+        if (!IPS_VariableExists($this->ReadPropertyInteger('CounterID'))) {
             echo $this->Translate('Selected variable is not a valid variable!');
             return false;
         }
@@ -98,7 +98,7 @@ class PDFReportEnergy extends IPSModule
         $pdf->writeHTML($this->GenerateHTMLHeader($logo), true, false, true, false, '');
 
         //Charts
-        if ($this->ReadPropertyInteger('TemperatureID') >= 10000) {
+        if (IPS_VariableExists($this->ReadPropertyInteger('TemperatureID'))) {
             $svg = $this->GenerateCharts($this->ReadPropertyInteger('TemperatureID'));
             $pdf->ImageSVG('@' . $svg, $x = 105, $y = '', $w = 90, $h = '', $link = '', $align = 5, $palign = 5, $border = 0, $fitonpage = true);
         }
@@ -278,7 +278,7 @@ class PDFReportEnergy extends IPSModule
 
         //Average Temperature
         $temperatureID = $this->ReadPropertyInteger('TemperatureID');
-        if ($temperatureID >= 10000) {
+        if (IPS_VariableExists($temperatureID)) {
             $avgTemp = AC_GetAggregatedValues($archivID, $temperatureID, 3, $startTime, $endTime, 0);
             if (count($avgTemp) != 0) {
                 $avgTemp = $avgTemp[0]['Avg'];
@@ -293,7 +293,7 @@ class PDFReportEnergy extends IPSModule
 
         //Prediction and Prozent
         $predictionID = $this->ReadPropertyInteger('PredictionID');
-        if ($predictionID >= 10000) {
+        if (IPS_VariableExists($predictionID)) {
             $prediction = GetValue($predictionID);
 
             $percent = 100 - round(($consumption / $prediction) * 100, 2);
