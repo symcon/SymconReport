@@ -217,9 +217,9 @@ EOT;
             $this->ReadPropertyInteger('DataVariable')
         ) == 0) { //default aggregation
             $headAvg = $this->Translate('Avg');
-        }else { //counter aggregation
+        } else { //counter aggregation
             $headAvg = $this->Translate('Consumption');
-        }       
+        }
         $headLimit = $this->Translate('Limit');
 
         return <<<EOT
