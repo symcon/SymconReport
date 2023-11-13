@@ -108,7 +108,11 @@ class MailReport extends IPSModule
         }
 
         $file = fopen($filename, 'w');
-        fwrite($file, "TimeStamp,Avg,MinTime,Min,MaxTime,Max\n");
+        if (AC_GetAggregationType($this->ReadPropertyInteger('ArchiveControlID'), $this->ReadPropertyInteger('Variable')) == 0) { //default aggregation
+            fwrite($file, "TimeStamp,Avg,MinTime,Min,MaxTime,Max\n");
+        } else { //counter aggregation
+            fwrite($file, "TimeStamp,Consumption,MinTime,Min,MaxTime,Max\n");
+        }
 
         $digits = 7;
         $profile = $this->GetProfileName(IPS_GetVariable($this->ReadPropertyInteger('Variable')));
