@@ -99,6 +99,8 @@ class PDFReportMulti extends IPSModule
             }
 
             $dataValues[$data['VariableID']] = $values;
+            $this->SendDebug('id', $data['VariableID'], 0);
+            $this->SendDebug('Values', print_r($values, true), 0);
         }
 
         return $dataValues;
@@ -170,7 +172,9 @@ EOT;
             $rows .= '<tr>';
             $rows .= '<td width="25%">' . date($this->GetDateTimeFormatForAggreagtion(), $ts) . '</td>';
             foreach ($json as $data) {
-                $rows .= '<td style="text-align: center;">' . GetValueFormattedEx($data['VariableID'], $values[$data['VariableID']]) . '</td>';
+                if (isset($values[$data['VariableID']])) {
+                    $rows .= '<td style="text-align: center;">' . GetValueFormattedEx($data['VariableID'], $values[$data['VariableID']]) . '</td>';
+                }
             }
             $rows .= '</tr>';
         }
