@@ -1,14 +1,14 @@
 {
-  "id": "{4D322247-AB07-4C49-BE60-5A04DE0EA3D8}",
-  "name": "PDFReportSingle",
-  "type": 3,
-  "vendor": "",
-  "aliases": [
-    "Report (PDF, Single)"
-  ],
-  "parentRequirements": [],
-  "childRequirements": [],
-  "implemented": [],
-  "prefix": "RAC",
-  "url": "https://github.com/symcon/SymconReport/tree/master/PDFReportSingle"
+    "id": "{4D322247-AB07-4C49-BE60-5A04DE0EA3D8}",
+    "name": "PDFReportSingle",
+    "type": 3,
+    "vendor": "",
+    "aliases": [
+        "Report (PDF, Single)"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "RAC",
+    "url": "https://github.com/symcon/SymconReport/tree/master/PDFReportSingle"
 }

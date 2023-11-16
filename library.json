@@ -1,12 +1,12 @@
 {
-	"id": "{8D443192-2700-4E07-A254-FCD6441D8457}",
-	"author": "Symcon GmbH",
-	"name": "Report Modules",
-	"url": "https://www.symcon.de/",
-	"compatibility": {
-		"version": "5.5"
-	},
-	"version": "1.4.1",
-	"build": 0,
-	"date": 0
+    "id": "{8D443192-2700-4E07-A254-FCD6441D8457}",
+    "author": "Symcon GmbH",
+    "name": "Report Modules",
+    "url": "https://www.symcon.de/",
+    "compatibility": {
+        "version": "5.5"
+    },
+    "version": "1.4.1",
+    "build": 0,
+    "date": 0
 }

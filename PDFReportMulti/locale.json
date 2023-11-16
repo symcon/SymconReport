@@ -1,29 +1,29 @@
 {
-  "translations": {
-    "de": {
-      "Select a PNG file as your PDF logo": "Wählen Sie bitte eine PNG Datei als Logo aus",
-      "Report (PDF)": "Report (PDF)",
-      "Selected data source is not a valid variable!": "Ausgewählte Quelle ist keine gültige Variable!",
-      "OK": "OK",
-      "Date": "Datum",
-      "Logo": "Logo",
-      "Company": "Firma",
-      "Title": "Titel",
-      "Footer": "Fußzeile",
-      "Data Sources": "Datenquellen",
-      "Data Aggregation": "Aggregation",
-      "Column Name": "Spaltenname",
-      "VariableID": "VariablenID",
-      "Hour": "Stunde",
-      "Day": "Tag",
-      "Week": "Woche",
-      "Month": "Month",
-      "Year": "Jahr",
-      "CW": "KW",
-      "Data Count": "Anzahl",
-      "Skip current unfinished dataset": "Überspringe den aktuellen unvollständigen Datensatz",
-      "Generate report now!": "Jetzt Report generieren!",
-      "Done! Please open the media file beneath this instance!": "Fertig! Bitte öffnen Sie die Mediendatei unterhalb der Instanz!"
+    "translations": {
+        "de": {
+            "Select a PNG file as your PDF logo": "Wählen Sie bitte eine PNG Datei als Logo aus",
+            "Report (PDF)": "Report (PDF)",
+            "Selected data source is not a valid variable!": "Ausgewählte Quelle ist keine gültige Variable!",
+            "OK": "OK",
+            "Date": "Datum",
+            "Logo": "Logo",
+            "Company": "Firma",
+            "Title": "Titel",
+            "Footer": "Fußzeile",
+            "Data Sources": "Datenquellen",
+            "Data Aggregation": "Aggregation",
+            "Column Name": "Spaltenname",
+            "VariableID": "VariablenID",
+            "Hour": "Stunde",
+            "Day": "Tag",
+            "Week": "Woche",
+            "Month": "Month",
+            "Year": "Jahr",
+            "CW": "KW",
+            "Data Count": "Anzahl",
+            "Skip current unfinished dataset": "Überspringe den aktuellen unvollständigen Datensatz",
+            "Generate report now!": "Jetzt Report generieren!",
+            "Done! Please open the media file beneath this instance!": "Fertig! Bitte öffnen Sie die Mediendatei unterhalb der Instanz!"
+        }
     }
-  }
 }
