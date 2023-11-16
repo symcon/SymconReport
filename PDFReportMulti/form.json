@@ -1,101 +1,102 @@
 {
-  "elements": [
-    {
-      "type": "Label",
-      "label": "Select a PNG file as your PDF logo"
-    },
-    {
-      "name": "LogoData",
-      "type": "SelectFile",
-      "caption": "Logo",
-      "extensions": ".png"
-    },
-    {
-      "type": "ValidationTextBox",
-      "name": "CompanyName",
-      "caption": "Company"
-    },
-    {
-      "type": "ValidationTextBox",
-      "name": "ReportTitle",
-      "caption": "Title"
-    },
-    {
-      "type": "ValidationTextBox",
-      "name": "ReportFooter",
-      "caption": "Footer"
-    },
-    {
-      "type": "List",
-      "name": "DataVariables",
-      "caption": "Data Sources",
-      "add": true,
-      "delete": true,
-      "rowCount": 5,
-      "columns": [
+    "elements": [
         {
-          "caption": "VariableID",
-          "name": "VariableID",
-          "width": "150px",
-          "add": 0,
-          "edit": {
-            "type": "SelectVariable",
-            "requiredLogging": 1
-          }
-        }, {
-          "caption": "Column Name",
-          "name": "Name",
-          "width": "auto",
-          "add": "",
-          "edit": {
-            "type": "ValidationTextBox"
-          }
+            "type": "Label",
+            "label": "Select a PNG file as your PDF logo"
+        },
+        {
+            "name": "LogoData",
+            "type": "SelectFile",
+            "caption": "Logo",
+            "extensions": ".png"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "CompanyName",
+            "caption": "Company"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "ReportTitle",
+            "caption": "Title"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "ReportFooter",
+            "caption": "Footer"
+        },
+        {
+            "type": "List",
+            "name": "DataVariables",
+            "caption": "Data Sources",
+            "add": true,
+            "delete": true,
+            "rowCount": 5,
+            "columns": [
+                {
+                    "caption": "VariableID",
+                    "name": "VariableID",
+                    "width": "150px",
+                    "add": 0,
+                    "edit": {
+                        "type": "SelectVariable",
+                        "requiredLogging": 1
+                    }
+                },
+                {
+                    "caption": "Column Name",
+                    "name": "Name",
+                    "width": "auto",
+                    "add": "",
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "DataAggregation",
+            "type": "Select",
+            "caption": "Data Aggregation",
+            "options": [
+                {
+                    "label": "Hour",
+                    "value": 0
+                },
+                {
+                    "label": "Day",
+                    "value": 1
+                },
+                {
+                    "label": "Week",
+                    "value": 2
+                },
+                {
+                    "label": "Month",
+                    "value": 3
+                },
+                {
+                    "label": "Year",
+                    "value": 4
+                }
+            ]
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "DataCount",
+            "caption": "Data Count"
+        },
+        {
+            "type": "CheckBox",
+            "name": "DataSkipFirst",
+            "caption": "Skip current unfinished dataset"
         }
-      ]
-    },
-    {
-      "name": "DataAggregation",
-      "type": "Select",
-      "caption": "Data Aggregation",
-      "options": [
+    ],
+    "actions": [
         {
-          "label": "Hour",
-          "value": 0
-        },
-        {
-          "label": "Day",
-          "value": 1
-        },
-        {
-          "label": "Week",
-          "value": 2
-        },
-        {
-          "label": "Month",
-          "value": 3
-        },
-        {
-          "label": "Year",
-          "value": 4
+            "type": "Button",
+            "label": "Generate report now!",
+            "onClick": "if(RAC_GenerateReport($id)) { \n echo (new IPSModule($id))->Translate('Done! Please open the media file beneath this instance!'); \n };"
         }
-      ]
-    },
-    {
-      "type": "NumberSpinner",
-      "name": "DataCount",
-      "caption": "Data Count"
-    },
-    {
-      "type": "CheckBox",
-      "name": "DataSkipFirst",
-      "caption": "Skip current unfinished dataset"
-    }
-  ],
-  "actions": [
-    {
-      "type": "Button",
-      "label": "Generate report now!",
-      "onClick": "if(RAC_GenerateReport($id)) { \n echo (new IPSModule($id))->Translate('Done! Please open the media file beneath this instance!'); \n };"
-    }
-  ]
+    ]
 }

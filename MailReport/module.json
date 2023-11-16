@@ -3,8 +3,7 @@
     "name": "MailReport",
     "type": 3,
     "vendor": "",
-    "aliases": 
-    [
+    "aliases": [
         "Report (Mail)"
     ],
     "parentRequirements": [],

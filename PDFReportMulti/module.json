@@ -1,14 +1,14 @@
 {
-  "id": "{505CF205-304D-D6F0-B065-E3EE670AF687}",
-  "name": "PDFReportMulti",
-  "type": 3,
-  "vendor": "",
-  "aliases": [
-    "Report (PDF, Multi)"
-  ],
-  "parentRequirements": [],
-  "childRequirements": [],
-  "implemented": [],
-  "prefix": "RAC",
-  "url": "https://github.com/symcon/SymconReport/tree/master/PDFReportMulti"
+    "id": "{505CF205-304D-D6F0-B065-E3EE670AF687}",
+    "name": "PDFReportMulti",
+    "type": 3,
+    "vendor": "",
+    "aliases": [
+        "Report (PDF, Multi)"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "RAC",
+    "url": "https://github.com/symcon/SymconReport/tree/master/PDFReportMulti"
 }
