@@ -4,11 +4,11 @@
     "type": 3,
     "vendor": "",
     "aliases": [
-        "Report (PDF, Energie)"
+        "Report (PDF, Energy)"
     ],
     "parentRequirements": [],
     "childRequirements": [],
     "implemented": [],
     "prefix": "RAC",
-    "url": "https://github.com/symcon/SymconReport/tree/master/PDFReportEnergie"
+    "url": "https://www.symcon.de/en/service/documentation/module-reference/symconreport/pdfreport-energy/"
 }

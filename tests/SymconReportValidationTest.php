@@ -12,9 +12,9 @@ class SymconReportValidationTest extends TestCaseSymconValidation
     {
         $this->validateModule(__DIR__ . '/../MailReport');
     }
-    public function testValidatePDFReportEnergie()
+    public function testValidatePDFReportEnergy()
     {
-        $this->validateModule(__DIR__ . '/../PDFReportEnergie');
+        $this->validateModule(__DIR__ . '/../PDFReportEnergy');
     }
     public function testValidatePDFReportSingleModule(): void
     {

@@ -23,7 +23,8 @@
             "Data Count": "Anzahl",
             "Skip current unfinished dataset": "Überspringe den aktuellen unvollständigen Datensatz",
             "Generate report now!": "Jetzt Report generieren!",
-            "Done! Please open the media file beneath this instance!": "Fertig! Bitte öffnen Sie die Mediendatei unterhalb der Instanz!"
+            "Done! Please open the media file beneath this instance!": "Fertig! Bitte öffnen Sie die Mediendatei unterhalb der Instanz!",
+            "https://www.symcon.de/en/service/documentation/module-reference/symconreport/pdfreport-multi/": "https://www.symcon.de/de/service/dokumentation/modulreferenz/symconreport/pdfreport-multi/"
         }
     }
 }

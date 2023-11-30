@@ -24,7 +24,8 @@
             "November": "November",
             "December": "Dezember",
             "Mail Report active": "Mail Report aktiv",
-            "None": "Keine"
+            "None": "Keine",
+            "https://www.symcon.de/en/service/documentation/module-reference/symconreport/mailreport/": "https://www.symcon.de/de/service/dokumentation/modulreferenz/symconreport/mailreport/"
         }
     }
 }
