@@ -7,8 +7,10 @@
   <source>
     <include>
       <directory suffix=".php">../MailReport</directory>
-      <directory suffix=".php">../PDFReport</directory>
-      <directory suffix=".php">..libs</directory>
+      <directory suffix=".php">../PDFReportEnergy</directory>
+      <directory suffix=".php">../PDFReportMulti</directory>
+      <directory suffix=".php">../PDFReportSingle</directory>
+      <directory suffix=".php">../libs</directory>
     </include>
   </source>
 </phpunit>

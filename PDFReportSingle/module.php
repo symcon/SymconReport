@@ -26,6 +26,27 @@ class PDFReportSingle extends IPSModule
         $this->RegisterMediaDocument('ReportPDF', $this->Translate('Report (PDF)'), 'pdf');
     }
 
+    public function GenerateReport()
+    {
+        if ($this->ReadPropertyInteger('DataVariable') == 0) {
+            echo $this->Translate('Selected data source is not a valid variable!');
+            return false;
+        }
+
+        $pdfContent = $this->GeneratePDF(
+            'IP-Symcon ' . IPS_GetKernelVersion(),
+            $this->ReadPropertyString('ReportTitle'),
+            $this->ReadPropertyString('ReportTitle'),
+            $this->GenerateHTML(),
+            'report.pdf'
+        );
+
+        $mediaID = $this->GetIDForIdent('ReportPDF');
+        IPS_SetMediaContent($mediaID, base64_encode($pdfContent));
+
+        return true;
+    }
+
     private function RegisterMediaDocument($Ident, $Name, $Extension, $Position = 0)
     {
         $this->RegisterMedia(5, $Ident, $Name, $Extension, $Position);
@@ -276,26 +297,5 @@ EOT;
         $pdf->writeHTML($html, true, false, true, false, '');
 
         return $pdf->Output($filename, 'S');
-    }
-
-    public function GenerateReport()
-    {
-        if ($this->ReadPropertyInteger('DataVariable') == 0) {
-            echo $this->Translate('Selected data source is not a valid variable!');
-            return false;
-        }
-
-        $pdfContent = $this->GeneratePDF(
-            'IP-Symcon ' . IPS_GetKernelVersion(),
-            $this->ReadPropertyString('ReportTitle'),
-            $this->ReadPropertyString('ReportTitle'),
-            $this->GenerateHTML(),
-            'report.pdf'
-        );
-
-        $mediaID = $this->GetIDForIdent('ReportPDF');
-        IPS_SetMediaContent($mediaID, base64_encode($pdfContent));
-
-        return true;
     }
 }

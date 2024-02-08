@@ -17,17 +17,26 @@
             "name": "Interval",
             "caption": "Interval of Messages",
             "options": [
-                { "label": "Daily", "value": 1 },
-                { "label": "Weekly", "value": 2 },
-                { "label": "Monthly", "value": 3 }
+                {
+                    "label": "Daily",
+                    "value": 1
+                },
+                {
+                    "label": "Weekly",
+                    "value": 2
+                },
+                {
+                    "label": "Monthly",
+                    "value": 3
+                }
             ]
         }
     ],
     "actions": [
-        { 
+        {
             "type": "Button",
             "label": "Send data",
-            "onClick": "MR_SendInfo($id);" 
+            "onClick": "MR_SendInfo($id);"
         }
     ]
 }

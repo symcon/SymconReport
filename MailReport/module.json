@@ -3,13 +3,12 @@
     "name": "MailReport",
     "type": 3,
     "vendor": "",
-    "aliases": 
-    [
+    "aliases": [
         "Report (Mail)"
     ],
     "parentRequirements": [],
     "childRequirements": [],
     "implemented": [],
     "prefix": "MR",
-    "url": "https://github.com/symcon/SymconReport/tree/master/MailReport"
+    "url": "https://www.symcon.de/en/service/documentation/module-reference/symconreport/mailreport/"
 }

@@ -1,0 +1,14 @@
+{
+    "id": "{0F74D76C-701E-8343-C563-091FBA9E7EBC}",
+    "name": "PDFReportEnergy",
+    "type": 3,
+    "vendor": "",
+    "aliases": [
+        "Report (PDF, Energy)"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "RAC",
+    "url": "https://www.symcon.de/en/service/documentation/module-reference/symconreport/pdfreport-energy/"
+}
