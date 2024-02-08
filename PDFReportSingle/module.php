@@ -233,7 +233,14 @@ EOT;
         $headDate = $this->Translate('Date');
         $headMin = $this->Translate('Min');
         $headMax = $this->Translate('Max');
-        $headAvg = $this->Translate('Avg');
+        if (AC_GetAggregationType(
+            IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0],
+            $this->ReadPropertyInteger('DataVariable')
+        ) == 0) { //default aggregation
+            $headAvg = $this->Translate('Avg');
+        } else { //counter aggregation
+            $headAvg = $this->Translate('Consumption');
+        }
         $headLimit = $this->Translate('Limit');
 
         return <<<EOT

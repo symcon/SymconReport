@@ -12,6 +12,7 @@
             "Min": "Min",
             "Max": "Max",
             "Avg": "Mittel",
+            "Consumption": "Verbrauch",
             "Limit": "Toleranz",
             "Logo": "Logo",
             "Company": "Firma",
@@ -33,5 +34,4 @@
             "Done! Please open the media file beneath this instance!": "Fertig! Bitte öffnen Sie die Mediendatei unterhalb der Instanz!",
             "https://www.symcon.de/en/service/documentation/module-reference/symconreport/pdfreport-single/": "https://www.symcon.de/de/service/dokumentation/modulreferenz/symconreport/pdfreport-single/"
         }
-    }
 }
