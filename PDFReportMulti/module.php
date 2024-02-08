@@ -194,7 +194,11 @@ EOT;
             $rows .= '<tr>';
             $rows .= '<td width="25%">' . date($this->GetDateTimeFormatForAggreagtion(), $ts) . '</td>';
             foreach ($json as $data) {
-                $rows .= '<td style="text-align: center;">' . GetValueFormattedEx($data['VariableID'], $values[$data['VariableID']]) . '</td>';
+                $rows .= '<td style="text-align: center;">';
+                if (isset($values[$data['VariableID']])) {
+                    $rows .= GetValueFormattedEx($data['VariableID'], $values[$data['VariableID']]);
+                }
+                $rows .= '</td>';
             }
             $rows .= '</tr>';
         }
