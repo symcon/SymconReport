@@ -20,6 +20,11 @@
             "value": "Gas"
         },
         {
+            "caption": "Decimal Separator Comma",
+            "type": "CheckBox",
+            "name": "DecimalSeparator"
+        },
+        {
             "type": "SelectVariable",
             "caption": "Outside temperature variable (optional)",
             "name": "TemperatureID",

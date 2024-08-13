@@ -55,6 +55,11 @@
             ]
         },
         {
+            "caption": "Decimal Separator Comma",
+            "type": "CheckBox",
+            "name": "DecimalSeparator"
+        },
+        {
             "name": "DataAggregation",
             "type": "Select",
             "caption": "Data Aggregation",
