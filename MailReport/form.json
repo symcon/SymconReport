@@ -13,9 +13,19 @@
             "caption": "Aggregated Variable"
         },
         {
-            "type": "CheckBox",
+            "type": "Select",
+            "caption": "Decimal Separator",
             "name": "DecimalSeparator",
-            "caption": "Decimal Separator Comma"
+            "options": [
+                {
+                    "caption": "Comma",
+                    "value": ","
+                },
+                {
+                    "caption": "Dot",
+                    "value": "."
+                }
+            ]
         },
         {
             "type": "Select",

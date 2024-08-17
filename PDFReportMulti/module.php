@@ -20,7 +20,7 @@ class PDFReportMulti extends IPSModule
         $this->RegisterPropertyInteger('DataAggregation', 1);
         $this->RegisterPropertyInteger('DataCount', 7);
         $this->RegisterPropertyBoolean('DataSkipFirst', true);
-        $this->RegisterPropertyBoolean('DecimalSeparator', true);
+        $this->RegisterPropertyString('DecimalSeparator', ',');
 
         $this->RegisterMediaDocument('ReportPDF', $this->Translate('Report (PDF)'), 'pdf');
     }
@@ -198,7 +198,7 @@ EOT;
                 $rows .= '<td style="text-align: center;">';
                 if (isset($values[$data['VariableID']])) {
                     $value = GetValueFormattedEx($data['VariableID'], $values[$data['VariableID']]);
-                    $rows .= $this->ReadPropertyBoolean('DecimalSeparator') ? str_replace('.', ',', $value) : $value;
+                    $rows .= $this->ReadPropertyString('DecimalSeparator') == ',' ? str_replace('.', ',', $value) : $value;
                 }
                 $rows .= '</td>';
             }

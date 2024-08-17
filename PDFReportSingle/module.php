@@ -17,7 +17,7 @@ class PDFReportSingle extends IPSModule
         $this->RegisterPropertyString('ReportTitle', '');
         $this->RegisterPropertyString('ReportFooter', '');
         $this->RegisterPropertyInteger('DataVariable', 0);
-        $this->RegisterPropertyBoolean('DecimalSeparator', true);
+        $this->RegisterPropertyString('DecimalSeparator', ',');
         $this->RegisterPropertyInteger('DataAggregation', 1);
         $this->RegisterPropertyInteger('DataCount', 7);
         $this->RegisterPropertyBoolean('DataSkipFirst', true);
@@ -206,7 +206,7 @@ EOT;
             $max = GetValueFormattedEx($variableID, $data['Max']);
             $avg = GetValueFormattedEx($variableID, $data['Avg']);
 
-            if ($this->ReadPropertyBoolean('DecimalSeparator')) {
+            if ($this->ReadPropertyString('DecimalSeparator') == ',') {
                 $min = str_replace('.', ',', $min);
                 $max = str_replace('.', ',', $max);
                 $avg = str_replace('.', ',', $avg);

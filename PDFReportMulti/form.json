@@ -53,11 +53,20 @@
                     }
                 }
             ]
-        },
-        {
-            "caption": "Decimal Separator Comma",
-            "type": "CheckBox",
-            "name": "DecimalSeparator"
+        },{
+            "type": "Select",
+            "caption": "Decimal Separator",
+            "name": "DecimalSeparator",
+            "options": [
+                {
+                    "caption": "Comma",
+                    "value": ","
+                },
+                {
+                    "caption": "Dot",
+                    "value": "."
+                }
+            ]
         },
         {
             "name": "DataAggregation",

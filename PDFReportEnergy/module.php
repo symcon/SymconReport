@@ -17,7 +17,7 @@ class PDFReportEnergy extends IPSModule
         $this->RegisterPropertyInteger('TemperatureID', 1);
         $this->RegisterPropertyInteger('PredictionID', 1);
         $this->RegisterPropertyInteger('CO2Type', -1);
-        $this->RegisterPropertyBoolean('DecimalSeparator', true);
+        $this->RegisterPropertyString('DecimalSeparator', ',');
 
         $this->RegisterMediaDocument('ReportPDF', $this->Translate('Report (PDF)'), 'pdf');
     }
@@ -326,7 +326,7 @@ class PDFReportEnergy extends IPSModule
         }
 
         //Format all values if with comma
-        if ($this->ReadPropertyBoolean('DecimalSeparator')) {
+        if ($this->ReadPropertyString('DecimalSeparator') == ',') {
             $consumption = str_replace('.', ',', $consumption);
             $consumptionLastYear = str_replace('.', ',', $consumptionLastYear);
             $avgTemp = str_replace('.', ',', $avgTemp);

@@ -46,7 +46,9 @@
             "https://www.symcon.de/en/service/documentation/module-reference/symconreport/pdfreport-energy/": "https://www.symcon.de/de/service/dokumentation/modulreferenz/symconreport/pdfreport-energie/",
             "PDFReportEnergy": "PDFReportEnergie",
             "Report (PDF, Energy)": "Report (PDF, Energie)",
-            "Decimal Separator Comma": "Dezimaltrennzeichen Komma"
+            "Decimal Separator Comma": "Dezimaltrennzeichen",
+          "Dot": "Punkt",
+            "Comma": "Komma"
         }
     }
 }

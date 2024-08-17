@@ -15,7 +15,7 @@ class MailReport extends IPSModule
         $this->RegisterPropertyInteger('SMTP', 0);
         $this->RegisterPropertyInteger('Variable', 0);
         $this->RegisterPropertyInteger('Interval', 1);
-        $this->RegisterPropertyBoolean('DecimalSeparator', true);
+        $this->RegisterPropertyString('DecimalSeparator', ',');
 
         $this->RegisterPropertyInteger('ArchiveControlID', IPS_GetInstanceListByModuleID(ARCHIVE_CONTROL_MODULE_ID)[0]);
         $this->RegisterVariableBoolean('Active', $this->Translate('Mail Report active'), '~Switch');
@@ -99,8 +99,8 @@ class MailReport extends IPSModule
             $this->GetAggregationEnd(),
             0
         );
-        $decimalSeparator = $this->ReadPropertyBoolean('DecimalSeparator') ? ',' : '.';
-        $csvSeparator = $this->ReadPropertyBoolean('DecimalSeparator') ? ';' : ',';
+        $decimalSeparator = $this->ReadPropertyString('DecimalSeparator');
+        $csvSeparator = $decimalSeparator == ',' ? ';' : ',';
         for ($i = count($aggregatedValues) - 1; $i >= 0; $i--) {
             $value = $aggregatedValues[$i];
             $dataString = date('j.n.Y H:i:s', $value['TimeStamp']) . $csvSeparator .
