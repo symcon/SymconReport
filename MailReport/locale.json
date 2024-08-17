@@ -26,8 +26,9 @@
             "Mail Report active": "Mail Report aktiv",
             "None": "Keine",
             "Decimal Separator Comma": "Dezimaltrennzeichen Komma",
-            "https://www.symcon.de/en/service/documentation/module-reference/symconreport/mailreport/": "https://www.symcon.de/de/service/dokumentation/modulreferenz/symconreport/mailreport/"
-       , "Dot": "Punkt",
-    "Comma": "Komma" }
+            "https://www.symcon.de/en/service/documentation/module-reference/symconreport/mailreport/": "https://www.symcon.de/de/service/dokumentation/modulreferenz/symconreport/mailreport/",
+            "Dot": "Punkt",
+            "Comma": "Komma"
+        }
     }
 }

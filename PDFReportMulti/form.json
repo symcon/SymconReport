@@ -53,7 +53,8 @@
                     }
                 }
             ]
-        },{
+        },
+        {
             "type": "Select",
             "caption": "Decimal Separator",
             "name": "DecimalSeparator",

@@ -33,8 +33,9 @@
             "Generate report now!": "Jetzt Report generieren!",
             "Decimal Separator Comma": "Dezimaltrennzeichen Komma",
             "Done! Please open the media file beneath this instance!": "Fertig! Bitte öffnen Sie die Mediendatei unterhalb der Instanz!",
-            "https://www.symcon.de/en/service/documentation/module-reference/symconreport/pdfreport-single/": "https://www.symcon.de/de/service/dokumentation/modulreferenz/symconreport/pdfreport-single/"
-        , "Dot": "Punkt",
-        "Comma": "Komma"}
+            "https://www.symcon.de/en/service/documentation/module-reference/symconreport/pdfreport-single/": "https://www.symcon.de/de/service/dokumentation/modulreferenz/symconreport/pdfreport-single/",
+            "Dot": "Punkt",
+            "Comma": "Komma"
+        }
     }
 }

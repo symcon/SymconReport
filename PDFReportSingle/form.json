@@ -29,7 +29,8 @@
             "type": "SelectVariable",
             "name": "DataVariable",
             "caption": "Data Source"
-        },{
+        },
+        {
             "type": "Select",
             "caption": "Decimal Separator",
             "name": "DecimalSeparator",
