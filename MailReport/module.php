@@ -21,7 +21,7 @@ class MailReport extends IPSModule
         $this->RegisterVariableBoolean('Active', $this->Translate('Mail Report active'), '~Switch');
         $this->EnableAction('Active');
 
-        //Update at next full hourF
+        //Update at next full hour
         $this->RegisterTimer('SendTimer', 0, "MR_SendInfo(\$_IPS['TARGET']);");
     }
 
