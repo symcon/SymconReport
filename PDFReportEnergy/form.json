@@ -20,6 +20,21 @@
             "value": "Gas"
         },
         {
+            "type": "Select",
+            "caption": "Decimal Separator",
+            "name": "DecimalSeparator",
+            "options": [
+                {
+                    "caption": "Comma",
+                    "value": ","
+                },
+                {
+                    "caption": "Dot",
+                    "value": "."
+                }
+            ]
+        },
+        {
             "type": "SelectVariable",
             "caption": "Outside temperature variable (optional)",
             "name": "TemperatureID",

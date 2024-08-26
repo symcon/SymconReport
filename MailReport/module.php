@@ -15,6 +15,7 @@ class MailReport extends IPSModule
         $this->RegisterPropertyInteger('SMTP', 0);
         $this->RegisterPropertyInteger('Variable', 0);
         $this->RegisterPropertyInteger('Interval', 1);
+        $this->RegisterPropertyString('DecimalSeparator', ',');
 
         $this->RegisterPropertyInteger('ArchiveControlID', IPS_GetInstanceListByModuleID(ARCHIVE_CONTROL_MODULE_ID)[0]);
         $this->RegisterVariableBoolean('Active', $this->Translate('Mail Report active'), '~Switch');
@@ -47,36 +48,6 @@ class MailReport extends IPSModule
         if (IPS_VariableExists($this->ReadPropertyInteger('Variable'))) {
             $this->RegisterReference($this->ReadPropertyInteger('Variable'));
         }
-    }
-
-    public function GetConfigurationForm()
-    {
-        $form = json_decode(file_get_contents(__DIR__ . '/form.json'));
-
-        $variableIndex = $this->GetElementIndexByName('Variable');
-
-        $variableOptions = [['label' => $this->Translate('None'), 'value' => 0]];
-        foreach (AC_GetAggregationVariables($this->ReadPropertyInteger('ArchiveControlID'), false) as $variable) {
-            if ($variable['AggregationActive'] && IPS_ObjectExists($variable['VariableID'])) {
-                $variableOptions[] = ['label' => $this->CreateLabel($variable['VariableID']), 'value' => $variable['VariableID']];
-            }
-        }
-
-        $compare = function ($a, $b)
-        {
-            if ($a['label'] == $b['label']) {
-                return 0;
-            } elseif ($a['label'] == $this->Translate('None')) {
-                return -1;
-            } elseif ($b['label'] == $this->Translate('None')) {
-                return 1;
-            } else {
-                return strcmp($a['label'], $b['label']);
-            }
-        };
-        usort($variableOptions, $compare);
-        $form->elements[$variableIndex]->options = $variableOptions;
-        return json_encode($form);
     }
 
     public function RequestAction($Ident, $Value)
@@ -128,14 +99,16 @@ class MailReport extends IPSModule
             $this->GetAggregationEnd(),
             0
         );
+        $decimalSeparator = $this->ReadPropertyString('DecimalSeparator');
+        $csvSeparator = $decimalSeparator == ',' ? ';' : ',';
         for ($i = count($aggregatedValues) - 1; $i >= 0; $i--) {
             $value = $aggregatedValues[$i];
-            $dataString = date('j.n.Y H:i:s', $value['TimeStamp']) . ',' .
-                          number_format($value['Avg'], $digits, '.', '') . ',' .
-                          date('j.n.Y H:i:s', $value['MinTime']) . ',' .
-                          number_format($value['Min'], $digits, '.', '') . ',' .
-                          date('j.n.Y H:i:s', $value['MaxTime']) . ',' .
-                          number_format($value['Max'], $digits, '.', '') . "\n";
+            $dataString = date('j.n.Y H:i:s', $value['TimeStamp']) . $csvSeparator .
+                          number_format($value['Avg'], $digits, $decimalSeparator, '') . $csvSeparator .
+                          date('j.n.Y H:i:s', $value['MinTime']) . $csvSeparator .
+                          number_format($value['Min'], $digits, $decimalSeparator, '') . $csvSeparator .
+                          date('j.n.Y H:i:s', $value['MaxTime']) . $csvSeparator .
+                          number_format($value['Max'], $digits, $decimalSeparator, '') . "\n";
             fwrite($file, $dataString);
         }
 

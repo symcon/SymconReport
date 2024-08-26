@@ -4,9 +4,9 @@
     "name": "Report Modules",
     "url": "https://www.symcon.de/",
     "compatibility": {
-        "version": "5.5"
+        "version": "6.0"
     },
-    "version": "1.4.2",
+    "version": "1.4.3",
     "build": 0,
     "date": 0
 }

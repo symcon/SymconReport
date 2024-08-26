@@ -20,6 +20,7 @@ class PDFReportMulti extends IPSModule
         $this->RegisterPropertyInteger('DataAggregation', 1);
         $this->RegisterPropertyInteger('DataCount', 7);
         $this->RegisterPropertyBoolean('DataSkipFirst', true);
+        $this->RegisterPropertyString('DecimalSeparator', ',');
 
         $this->RegisterMediaDocument('ReportPDF', $this->Translate('Report (PDF)'), 'pdf');
     }
@@ -196,7 +197,8 @@ EOT;
             foreach ($json as $data) {
                 $rows .= '<td style="text-align: center;">';
                 if (isset($values[$data['VariableID']])) {
-                    $rows .= GetValueFormattedEx($data['VariableID'], $values[$data['VariableID']]);
+                    $value = GetValueFormattedEx($data['VariableID'], $values[$data['VariableID']]);
+                    $rows .= $this->ReadPropertyString('DecimalSeparator') == ',' ? str_replace('.', ',', $value) : $value;
                 }
                 $rows .= '</td>';
             }

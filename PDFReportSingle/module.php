@@ -17,6 +17,7 @@ class PDFReportSingle extends IPSModule
         $this->RegisterPropertyString('ReportTitle', '');
         $this->RegisterPropertyString('ReportFooter', '');
         $this->RegisterPropertyInteger('DataVariable', 0);
+        $this->RegisterPropertyString('DecimalSeparator', ',');
         $this->RegisterPropertyInteger('DataAggregation', 1);
         $this->RegisterPropertyInteger('DataCount', 7);
         $this->RegisterPropertyBoolean('DataSkipFirst', true);
@@ -198,13 +199,18 @@ EOT;
     private function GenerateHTMLRows()
     {
         $variableID = $this->ReadPropertyInteger('DataVariable');
-
         $rows = '';
         foreach ($this->FetchData() as $data) {
             $date = date($this->GetDateTimeFormatForAggreagtion(), $data['TimeStamp']);
             $min = GetValueFormattedEx($variableID, $data['Min']);
             $max = GetValueFormattedEx($variableID, $data['Max']);
             $avg = GetValueFormattedEx($variableID, $data['Avg']);
+
+            if ($this->ReadPropertyString('DecimalSeparator') == ',') {
+                $min = str_replace('.', ',', $min);
+                $max = str_replace('.', ',', $max);
+                $avg = str_replace('.', ',', $avg);
+            }
 
             $status = $this->CheckDataLimit($data['Min'], $data['Max']);
 
