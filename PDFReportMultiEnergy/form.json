@@ -1,0 +1,83 @@
+{
+    "status": [
+        {
+            "code": 200,
+            "icon": "error",
+            "caption": "The Counter has no data for last month"
+        }
+    ],
+    "elements": [
+        {
+            "type": "RowLayout",
+            "items": [
+                {
+                    "type": "Select",
+                    "name": "AggregationLevel",
+                    "caption": "Aggregation Level",
+                    "options": [
+                        {
+                            "caption": "Hourly",
+                            "value": 0
+                        },
+                        {
+                            "caption": "Daily",
+                            "value": 1
+                        },
+                        {
+                            "caption": "Weekly",
+                            "value": 2
+                        },
+                        {
+                            "caption": "Monthly",
+                            "value": 3
+                        }
+                    ]
+                },
+                {
+                    "type": "Select",
+                    "name": "DecimalSeparator",
+                    "caption": "Decimal Separator",
+                    "options": [
+                        {
+                            "caption": "Comma",
+                            "value": ","
+                        },
+                        {
+                            "caption": "Dot",
+                            "value": "."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "List",
+            "caption": "Energy Counters",
+            "name": "EnergyVariables",
+            "columns": [
+                {
+                    "caption": "Counter",
+                    "name": "CounterVariable",
+                    "width": "auto",
+                    "add": 0,
+                    "edit": {
+                        "type": "SelectVariable",
+                        "requireLogging": 4,
+                        "validVariableTypes": [
+                            2
+                        ]
+                    }
+                }
+            ],
+            "add": true,
+            "delete": true
+        }
+    ],
+    "actions": [
+        {
+            "type": "Button",
+            "caption": "Generate PDF",
+            "onClick": "if(RAC_GenerateMultiEnergyReport($id)) { \n echo (new IPSModule($id))->Translate('Done! Please open the media file beneath this instance!'); \n }else{echo (new IPSModule($id))->Translate('Fail! Something is wrong');};"
+        }
+    ]
+}
