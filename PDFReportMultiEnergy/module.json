@@ -1,0 +1,14 @@
+{
+    "id": "{7A5D0FAC-67A8-D41A-7BBF-B3C9F238D823}",
+    "name": "PDFReportMultiEnergy",
+    "type": 3,
+    "vendor": "",
+    "aliases": [
+        "Report (PDF, Multi-Energy)"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "RAC",
+    "url": "https://www.symcon.de/en/service/documentation/module-reference/symconreport/pdfreport-multi-energy/"
+}
