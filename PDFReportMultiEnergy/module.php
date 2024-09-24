@@ -50,7 +50,7 @@ class PDFReportMultiEnergy extends IPSModule
         switch ($Ident) {
             case 'Start':
             case 'End':
-                $this->SetValue("Start", intval($Value));
+                $this->SetValue('Start', intval($Value));
                 break;
         }
     }
@@ -115,11 +115,11 @@ class PDFReportMultiEnergy extends IPSModule
         //Get Times
         $startTime = $this->GetValue('Start');
         $endTime = $this->GetValue('End');
-        if($startTime > $endTime){ 
+        if ($startTime > $endTime) {
             $startTime = $this->GetValue('End');
             $endTime = $this->GetValue('Start');
         }
-        $timestamps = $this->Translate('From') .' '. date('d.m.Y', $startTime) . ' '.$this->Translate('to').' ' . date('d.m.Y', $endTime);
+        $timestamps = $this->Translate('From') . ' ' . date('d.m.Y', $startTime) . ' ' . $this->Translate('to') . ' ' . date('d.m.Y', $endTime);
 
         return <<<EOT
         <br/><br/><br/>
@@ -158,7 +158,6 @@ class PDFReportMultiEnergy extends IPSModule
         $textPercentage = $this->Translate('Percentage');
         $textTotalConsumption = $this->Translate('Total Consumption');
 
-
         return <<<EOT
         <h3>$textTotalConsumption: $totalConsumption kwh</h3>
         <br> </br>
@@ -179,7 +178,7 @@ class PDFReportMultiEnergy extends IPSModule
         //Get Times
         $startTime = $this->GetValue('Start');
         $endTime = $this->GetValue('End');
-        if($startTime > $endTime){ 
+        if ($startTime > $endTime) {
             $startTime = $this->GetValue('End');
             $endTime = $this->GetValue('Start');
         }
@@ -190,11 +189,11 @@ class PDFReportMultiEnergy extends IPSModule
         foreach ($variables as $variable) {
             $variable = $variable['CounterVariable'];
             $aggregatedValues = AC_GetAggregatedValues($archiveID, $variable, $this->ReadPropertyInteger('AggregationLevel'), $startTime, $endTime, 0);
-            $this->SendDebug('Values of' .$variable, print_r($aggregatedValues, true), 0);
+            $this->SendDebug('Values of' . $variable, print_r($aggregatedValues, true), 0);
             //ToDO look if the Values are 1000 and the Endtime match
-            
-            if(count($aggregatedValues) === 1000 && $startTime != $aggregatedValues[array_key_last($aggregatedValues)]['TimeStamp']){
-                $this->SendDebug('Variable ' . $variable , 'Too many datasets, get higher aggregationLevel, to fetch all datasets for the period',0);
+
+            if (count($aggregatedValues) === 1000 && $startTime != $aggregatedValues[array_key_last($aggregatedValues)]['TimeStamp']) {
+                $this->SendDebug('Variable ' . $variable, 'Too many datasets, get higher aggregationLevel, to fetch all datasets for the period', 0);
             }
             $consumption = round(array_sum(array_column($aggregatedValues, 'Avg')), 2);
             $totalConsumption += $consumption;
@@ -204,9 +203,9 @@ class PDFReportMultiEnergy extends IPSModule
                 'Percentage'  => 0
             ];
         }
-        
+
         $values['Total'] = $totalConsumption;
-        if($totalConsumption == 0){
+        if ($totalConsumption == 0) {
             $totalConsumption = 1; // To prevent the division by zero
         }
         //Calculate the percentage
@@ -214,7 +213,6 @@ class PDFReportMultiEnergy extends IPSModule
             $data[$key]['Percentage'] = round(($value['Consumption'] / $totalConsumption) * 100, 2);
         }
         $values['Variables'] = $data;
-        
 
         return $values;
     }
