@@ -17,10 +17,10 @@ class PDFReportMultiEnergy extends IPSModule
         $this->RegisterPropertyString('EnergyVariables', '[]');
 
         //Variables
-        $this->RegisterVariableInteger('Start', 'Start', '~UnixTimestampDate', 1);
-        $this->SetValue('Start', time());
-        $this->RegisterVariableInteger('End', 'End', '~UnixTimestampDate', 2);
-        $this->SetValue('End', time() - (60 * 60 * 24));
+        $this->RegisterVariableInteger('Start', $this->Translate('Start'), '~UnixTimestampDate', 1);
+        $this->SetValue('Start', time() - (60 * 60 * 24));
+        $this->RegisterVariableInteger('End', $this->Translate('End'), '~UnixTimestampDate', 2);
+        $this->SetValue('End', time());
         $this->RegisterMediaDocument('ReportPDF', $this->Translate('Report (PDF)'), 'pdf', 4);
         $this->RegisterScript('Generate', 'Generate', "<? RAC_GenerateMultiEnergyReport(IPS_GetParent(\$_IPS['SELF']));", 3);
 
@@ -29,7 +29,7 @@ class PDFReportMultiEnergy extends IPSModule
     public function GenerateMultiEnergyReport(): bool
     {
         if (count(json_decode($this->ReadPropertyString('EnergyVariables'), true)) === 0) {
-            echo $this->Translate('Selected variable is not a valid variable!');
+            echo $this->Translate('No Variables are selected.');
             return false;
         }
 
@@ -43,6 +43,16 @@ class PDFReportMultiEnergy extends IPSModule
         IPS_SetMediaContent($mediaID, base64_encode($pdfContent));
 
         return true;
+    }
+
+    public function RequestAction($Ident, $Value): void
+    {
+        switch ($Ident) {
+            case 'Start':
+            case 'End':
+                $this->SetValue("Start", intval($Value));
+                break;
+        }
     }
 
     private function RegisterMediaDocument($Ident, $Name, $Extension, $Position = 0): void
@@ -89,31 +99,10 @@ class PDFReportMultiEnergy extends IPSModule
         $pdf->AddPage();
 
         //PDF Content
-        // //Header
-        // $logo = $this->ReadPropertyString('LogoData');
-        // //echo($logo);
-        // if (strpos(base64_decode($logo), '<svg') !== false) {
-        //     $logo = base64_decode($logo);
-        //     $pdf->ImageSVG('@' . $logo, $x = 150, $y = 0, $w = 50, $h = 50, $border = 1);
-        //     $logo = '';
-        // } elseif ($logo != '') {
-        //     $logo = '<img src="@' . $logo . '">';
-        // }
-
+        //Header
         $pdf->writeHTML($this->GenerateHTMLHeader(), true, false, true, false, '');
 
-        // //Charts
-        // if (IPS_VariableExists($this->ReadPropertyInteger('TemperatureID'))) {
-        //     $svg = $this->GenerateCharts($this->ReadPropertyInteger('TemperatureID'));
-        //     $pdf->ImageSVG('@' . $svg, $x = 105, $y = '', $w = 90, $h = '', $link = '', $align = 5, $palign = 5, $border = 0, $fitonpage = true);
-        // }
-        // $svg = $this->GenerateCharts($this->ReadPropertyInteger('CounterID'));
-        // $pdf->ImageSVG('@' . $svg, $x = 10, $pdf->GetY(), $w = 90, $h = '', $link = '', $align = '', $palign = '', $border = 0, $fitonpage = true);
-
-        //reset Y
-        //$pdf->setY($pdf->getY() + 5);
-
-        //text
+        //Text
         $pdf->writeHTML($this->GenerateHTMLText(), true, false, true, false, '');
 
         //Save the pdf
@@ -123,18 +112,19 @@ class PDFReportMultiEnergy extends IPSModule
     private function GenerateHTMLHeader()
     {
         $title = strtoupper($this->Translate('Consumption'));
-        $timestamps = 'From ' . date('d.m.Y', $this->GetValue('Start')) . ' to ' . date('d.m.Y', $this->GetValue('End'));
+        //Get Times
+        $startTime = $this->GetValue('Start');
+        $endTime = $this->GetValue('End');
+        if($startTime > $endTime){ 
+            $startTime = $this->GetValue('End');
+            $endTime = $this->GetValue('Start');
+        }
+        $timestamps = $this->Translate('From') .' '. date('d.m.Y', $startTime) . ' '.$this->Translate('to').' ' . date('d.m.Y', $endTime);
 
         return <<<EOT
-        <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr>
-            <td>
-                <br/><br/><br/>
-                <h1 style="font-weight: normal; font-size: 25px">$title</h1>
-                <p> $timestamps </p>
-            </td>
-        </tr>
-        </table>
+        <br/><br/><br/>
+        <h1 style="font-weight: normal; font-size: 25px">$title</h1>
+        <p>$timestamps</p>
         EOT;
     }
 
@@ -146,6 +136,13 @@ class PDFReportMultiEnergy extends IPSModule
             $name = $variable['Name'];
             $consumption = $variable['Consumption'];
             $percentage = $variable['Percentage'];
+
+            //replace the decimal separator
+            $consumption = str_replace('.', $this->ReadPropertyString('DecimalSeparator'), strval($consumption));
+            $percentage = str_replace('.', $this->ReadPropertyString('DecimalSeparator'), strval($percentage));
+            $this->SendDebug('Consumption', $consumption, 0);
+            $this->SendDebug('percentage', $percentage, 0);
+
             $dataText .= <<<EOT
                 <tr>
                     <td><p>$name</p></td>
@@ -155,15 +152,21 @@ class PDFReportMultiEnergy extends IPSModule
             EOT;
         }
         $totalConsumption = $data['Total'];
+        $totalConsumption = str_replace('.', $this->ReadPropertyString('DecimalSeparator'), strval($totalConsumption));
+        $textCounter = $this->Translate('Counter');
+        $textConsumption = $this->Translate('Consumption');
+        $textPercentage = $this->Translate('Percentage');
+        $textTotalConsumption = $this->Translate('Total Consumption');
+
 
         return <<<EOT
-        <h3>Total consumption: $totalConsumption kwh</h3>
+        <h3>$textTotalConsumption: $totalConsumption kwh</h3>
         <br> </br>
-            <table cellpadding="2" cellspacing="0" border="0" width="100%">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr style="background-color: #cccccc; padding:5px;">
-                    <th><p>Counter</p></th>
-                    <th><p>Consumption</p></th>
-                    <th><p>Percentage</p></th>
+                    <th><p>$textCounter</p></th>
+                    <th><p>$textConsumption</p></th>
+                    <th><p>$textPercentage</p></th>
                 </tr>
                 $dataText
             </table>
@@ -176,6 +179,10 @@ class PDFReportMultiEnergy extends IPSModule
         //Get Times
         $startTime = $this->GetValue('Start');
         $endTime = $this->GetValue('End');
+        if($startTime > $endTime){ 
+            $startTime = $this->GetValue('End');
+            $endTime = $this->GetValue('Start');
+        }
         $data = [];
         $totalConsumption = 0;
 
@@ -183,8 +190,13 @@ class PDFReportMultiEnergy extends IPSModule
         foreach ($variables as $variable) {
             $variable = $variable['CounterVariable'];
             $aggregatedValues = AC_GetAggregatedValues($archiveID, $variable, $this->ReadPropertyInteger('AggregationLevel'), $startTime, $endTime, 0);
+            $this->SendDebug('Values of' .$variable, print_r($aggregatedValues, true), 0);
             //ToDO look if the Values are 1000 and the Endtime match
-            $consumption = array_sum(array_column($aggregatedValues, 'Avg'));
+            
+            if(count($aggregatedValues) === 1000 && $startTime != $aggregatedValues[array_key_last($aggregatedValues)]['TimeStamp']){
+                $this->SendDebug('Variable ' . $variable , 'Too many datasets, get higher aggregationLevel, to fetch all datasets for the period',0);
+            }
+            $consumption = round(array_sum(array_column($aggregatedValues, 'Avg')), 2);
             $totalConsumption += $consumption;
             $data[] = [
                 'Name'        => IPS_GetName($variable),
@@ -192,13 +204,17 @@ class PDFReportMultiEnergy extends IPSModule
                 'Percentage'  => 0
             ];
         }
-
+        
+        $values['Total'] = $totalConsumption;
+        if($totalConsumption == 0){
+            $totalConsumption = 1; // To prevent the division by zero
+        }
         //Calculate the percentage
         foreach ($data as $key => $value) {
             $data[$key]['Percentage'] = round(($value['Consumption'] / $totalConsumption) * 100, 2);
         }
         $values['Variables'] = $data;
-        $values['Total'] = $totalConsumption;
+        
 
         return $values;
     }

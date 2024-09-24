@@ -1,5 +1,25 @@
 {
     "translations": {
-        "de": {}
+        "de": {
+            "Start": "Start",
+            "End": "End",
+            "Report (PDF)": "Report (PDF)",
+            "Consumption": "Verbrauch",
+            "From": "Von",
+            "to": "bis",
+            "Counter": "Zähler",
+            "Percentage": "Prozentsatz",
+            "Total Consumption": "Gesamtverbrauch",
+            "Hourly": "Stündlich",
+            "Daily": "Täglich",
+            "Weekly": "Wöchentlich",
+            "Monthly": "Monatlich",
+            "Decimal Separator": "Dezimal Separator",
+            "Energy Counters": "Energiezähler",
+            "Generate PDF": "Generiere PDF",
+            "Comma": "Komma",
+            "Dot": "Punkt",
+            "No Variables are selected.": "Keine Variable ausgewählt"
+        }
     }
 }
