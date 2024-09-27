@@ -361,9 +361,9 @@ class PDFReportEnergy extends IPSModule
     private function timeStampToDateObject(int $timestamp)
     {
         return json_encode([
-            'day' => date('d', $timestamp),
+            'day'   => date('d', $timestamp),
             'month' => date('n', $timestamp),
-            'year' => date('Y', $timestamp),
+            'year'  => date('Y', $timestamp),
         ]);
     }
 
