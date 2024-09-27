@@ -35,16 +35,46 @@
             ]
         },
         {
-            "type": "SelectVariable",
-            "caption": "Outside temperature variable (optional)",
-            "name": "TemperatureID",
-            "requireLogging": 1
+            "type": "SelectDate",
+            "caption": "Start Time",
+            "name": "StartTime"
         },
         {
-            "type": "SelectVariable",
-            "caption": "Consumption meter variable",
-            "name": "CounterID",
-            "requireLogging": 4
+            "type": "SelectDate",
+            "caption": "End Time",
+            "name": "EndTime"
+        },
+        {
+            "type": "RowLayout",
+            "items": [
+                {
+                    "type": "SelectVariable",
+                    "caption": "Outside temperature variable (optional)",
+                    "name": "TemperatureID",
+                    "requireLogging": 1
+                },
+                {
+                    "type": "CheckBox",
+                    "caption": "Dynamic Scaling",
+                    "name": "TemperatureDynamic"
+                }
+            ]
+        },
+        {
+            "type": "RowLayout",
+            "items": [
+                {
+                    "type": "SelectVariable",
+                    "caption": "Consumption meter variable",
+                    "name": "CounterID",
+                    "requireLogging": 4
+                },
+                {
+                    "type": "CheckBox",
+                    "caption": "Dynamic Scaling",
+                    "name": "CounterDynamic"
+                }
+            ]
         },
         {
             "type": "SelectVariable",
@@ -81,6 +111,11 @@
                     "value": 71
                 }
             ]
+        },
+        {
+            "type": "SelectVariable",
+            "caption": "Custom Text",
+            "name": "CustomTextID"
         }
     ],
     "actions": [

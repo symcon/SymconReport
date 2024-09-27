@@ -48,7 +48,11 @@
             "Report (PDF, Energy)": "Report (PDF, Energie)",
             "Decimal Separator Comma": "Dezimaltrennzeichen",
             "Dot": "Punkt",
-            "Comma": "Komma"
+            "Comma": "Komma",
+            "Custom Text": "Freitext",
+            "Start Time": "Startzeit",
+            "End Time": "Endzeit",
+            "Dynamic Scaling": "Dynamische Skalierung"
         }
     }
 }

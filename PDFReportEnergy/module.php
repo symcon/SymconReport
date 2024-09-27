@@ -14,10 +14,15 @@ class PDFReportEnergy extends IPSModule
         $this->RegisterPropertyString('LogoData', '');
         $this->RegisterPropertyString('EnergyType', 'Gas');
         $this->RegisterPropertyInteger('CounterID', 1);
+        $this->RegisterPropertyBoolean('CounterDynamic', true);
         $this->RegisterPropertyInteger('TemperatureID', 1);
+        $this->RegisterPropertyBoolean('TemperatureDynamic', true);
         $this->RegisterPropertyInteger('PredictionID', 1);
         $this->RegisterPropertyInteger('CO2Type', -1);
         $this->RegisterPropertyString('DecimalSeparator', ',');
+        $this->RegisterPropertyString('StartTime', $this->timeStampToDateObject(strtotime('first day of last month 00:00:00')));
+        $this->RegisterPropertyString('EndTime', $this->timeStampToDateObject(strtotime('first day of this month 00:00:00')));
+        $this->RegisterPropertyInteger('CustomTextID', 1);
 
         $this->RegisterMediaDocument('ReportPDF', $this->Translate('Report (PDF)'), 'pdf');
     }
@@ -100,10 +105,10 @@ class PDFReportEnergy extends IPSModule
 
         //Charts
         if (IPS_VariableExists($this->ReadPropertyInteger('TemperatureID'))) {
-            $svg = $this->GenerateCharts($this->ReadPropertyInteger('TemperatureID'));
+            $svg = $this->GenerateCharts($this->ReadPropertyInteger('TemperatureID'), $this->ReadPropertyBoolean('TemperatureDynamic'));
             $pdf->ImageSVG('@' . $svg, $x = 105, $y = '', $w = 90, $h = '', $link = '', $align = 5, $palign = 5, $border = 0, $fitonpage = true);
         }
-        $svg = $this->GenerateCharts($this->ReadPropertyInteger('CounterID'));
+        $svg = $this->GenerateCharts($this->ReadPropertyInteger('CounterID'), $this->ReadPropertyBoolean('CounterDynamic'));
         $pdf->ImageSVG('@' . $svg, $x = 10, $pdf->GetY(), $w = 90, $h = '', $link = '', $align = '', $palign = '', $border = 0, $fitonpage = true);
 
         //reset Y
@@ -137,9 +142,9 @@ class PDFReportEnergy extends IPSModule
         EOT;
     }
 
-    private function GenerateCharts(int $id)
+    private function GenerateCharts(int $id, bool $dynamic)
     {
-        $chart = '<meta xmlns:sym="symcon">' . AC_RenderChart(IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0], $id, strtotime('first day of last month 00:00:00'), 3, 0, false, false, 800, 500) . '</meta>';
+        $chart = '<meta xmlns:sym="symcon">' . AC_RenderChart(IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0], $id, $this->getStartTime(), 3, 0, false, $dynamic, 800, 500) . '</meta>';
         $example = simplexml_load_string($chart);
 
         //add text-anchor
@@ -248,6 +253,10 @@ class PDFReportEnergy extends IPSModule
             </table>
             EOT;
         }
+        $customTextID = $this->ReadPropertyInteger('CustomTextID');
+        if ($customTextID > 1) {
+            $text .= GetValue($customTextID);
+        }
         return $text;
     }
 
@@ -255,8 +264,8 @@ class PDFReportEnergy extends IPSModule
     {
         $archivID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
         //Get Times
-        $startTime = strtotime('first day of last month 00:00:00');
-        $endTime = strtotime('first day of this month 00:00:00');
+        $startTime = $this->getStartTime();
+        $endTime = $this->getEndTime();
         $month = $this->Translate(date('F', $startTime));
 
         //Consumption last month
@@ -347,5 +356,30 @@ class PDFReportEnergy extends IPSModule
         ];
 
         return $data;
+    }
+
+    private function timeStampToDateObject(int $timestamp)
+    {
+        return json_encode([
+            'day' => date('d', $timestamp),
+            'month' => date('n', $timestamp),
+            'year' => date('Y', $timestamp),
+        ]);
+    }
+
+    private function jsonStringToTimeStamp(string $string)
+    {
+        $json = json_decode($string, true);
+        return mktime(0, 0, 0, intval($json['month']), intval($json['day']), intval($json['year']));
+    }
+
+    private function getStartTime()
+    {
+        return $this->jsonStringToTimeStamp($this->ReadPropertySTring('StartTime'));
+    }
+
+    private function getEndTime()
+    {
+        return $this->jsonStringToTimeStamp($this->ReadPropertySTring('EndTime'));
     }
 }
