@@ -18,9 +18,15 @@ class PDFReportMultiEnergy extends IPSModule
 
         //Variables
         $this->RegisterVariableInteger('Start', $this->Translate('Start'), '~UnixTimestampDate', 1);
-        $this->SetValue('Start', time() - (60 * 60 * 24));
+        $this->EnableAction('Start');
+        if ($this->GetValue('Start') == 0) {
+            $this->SetValue('Start', time() - (60 * 60 * 24));
+        }
         $this->RegisterVariableInteger('End', $this->Translate('End'), '~UnixTimestampDate', 2);
-        $this->SetValue('End', time());
+        $this->EnableAction('End');
+        if ($this->GetValue('End') == 0) {
+            $this->SetValue('End', time());
+        }
         $this->RegisterMediaDocument('ReportPDF', $this->Translate('Report (PDF)'), 'pdf', 4);
         $this->RegisterScript('Generate', 'Generate', "<? RAC_GenerateMultiEnergyReport(IPS_GetParent(\$_IPS['SELF']));", 3);
 
