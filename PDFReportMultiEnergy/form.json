@@ -64,6 +64,7 @@
                         "type": "SelectVariable",
                         "requireLogging": 4,
                         "validVariableTypes": [
+                            1,
                             2
                         ]
                     }
