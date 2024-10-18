@@ -53,12 +53,7 @@ class PDFReportMultiEnergy extends IPSModule
 
     public function RequestAction($Ident, $Value): void
     {
-        switch ($Ident) {
-            case 'Start':
-            case 'End':
-                $this->SetValue('Start', intval($Value));
-                break;
-        }
+        $this->SetValue($Ident, intval($Value));
     }
 
     private function RegisterMediaDocument($Ident, $Name, $Extension, $Position = 0): void
