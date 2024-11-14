@@ -15,6 +15,12 @@
         },
         {
             "type": "ValidationTextBox",
+            "caption": "Header Text",
+            "name": "HeaderText",
+            "value": ""
+        },
+        {
+            "type": "ValidationTextBox",
             "caption": "Energy Type",
             "name": "EnergyType",
             "value": "Gas"
@@ -114,7 +120,12 @@
         },
         {
             "type": "SelectVariable",
-            "caption": "Custom Text",
+            "caption": "Custom Text Top",
+            "name": "CustomTextIDTop"
+        },
+        {
+            "type": "SelectVariable",
+            "caption": "Custom Text Bottom",
             "name": "CustomTextID"
         }
     ],

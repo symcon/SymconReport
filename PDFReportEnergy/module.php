@@ -13,6 +13,7 @@ class PDFReportEnergy extends IPSModule
 
         $this->RegisterPropertyString('LogoData', '');
         $this->RegisterPropertyString('EnergyType', 'Gas');
+        $this->RegisterPropertyString('HeaderText', '');
         $this->RegisterPropertyInteger('CounterID', 1);
         $this->RegisterPropertyBoolean('CounterDynamic', true);
         $this->RegisterPropertyInteger('TemperatureID', 1);
@@ -23,6 +24,7 @@ class PDFReportEnergy extends IPSModule
         $this->RegisterPropertyString('StartTime', $this->timeStampToDateObject(strtotime('first day of last month 00:00:00')));
         $this->RegisterPropertyString('EndTime', $this->timeStampToDateObject(strtotime('first day of this month 00:00:00')));
         $this->RegisterPropertyInteger('CustomTextID', 1);
+        $this->RegisterPropertyInteger('CustomTextIDTop', 1);
 
         $this->RegisterMediaDocument('ReportPDF', $this->Translate('Report (PDF)'), 'pdf');
     }
@@ -123,8 +125,9 @@ class PDFReportEnergy extends IPSModule
 
     private function GenerateHTMLHeader(string $logo)
     {
-        $date = strtoupper($this->Translate(date('F', strtotime('-1 month'))) . ' ' . date('Y'));
-        $energy = strtoupper($this->Translate('Your') . ' ' . $this->ReadPropertyString('EnergyType') . $this->Translate(' consumption'));
+        $startTime = $this->getStartTime();
+        $date = strtoupper($this->Translate(date('F', $startTime)) . ' ' . date('Y', $startTime));
+        $energy =  $this->ReadPropertyString('HeaderText');
         $title = strtoupper($this->Translate('Consumption'));
 
         return <<<EOT
@@ -226,14 +229,21 @@ class PDFReportEnergy extends IPSModule
         <<<EOT
         <p>$consumption </p>
         <br>
+        EOT;
+        $customTextTopID = $this->ReadPropertyInteger('CustomTextIDTop');
+        if ($customTextTopID > 1) {
+            $text .= GetValue($customTextTopID);
+        }
+        $text .=
+        <<<EOT
         <h2 style="font-weight: normal; font-size: 25px">$title</h2>
         <hr style="height: 5px">
         <br> </br>
         <h3>$data[month]</h3>
             <p>
             $data[avgTemp] <br>
-            $predictionText 
-            $valueText 
+            $predictionText
+            $valueText
             $consumptionText2
             </p>
         EOT;

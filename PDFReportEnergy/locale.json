@@ -49,7 +49,8 @@
             "Decimal Separator Comma": "Dezimaltrennzeichen",
             "Dot": "Punkt",
             "Comma": "Komma",
-            "Custom Text": "Freitext",
+            "Custom Text Top": "Freitext Oben",
+            "Custom Text Bottom": "Freitext Unten",
             "Start Time": "Startzeit",
             "End Time": "Endzeit",
             "Dynamic Scaling": "Dynamische Skalierung"
