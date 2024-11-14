@@ -23,7 +23,8 @@
             "type": "ValidationTextBox",
             "caption": "Energy Type",
             "name": "EnergyType",
-            "value": "Gas"
+            "value": "Gas",
+            "visible": false
         },
         {
             "type": "Select",

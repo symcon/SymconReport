@@ -53,7 +53,8 @@
             "Custom Text Bottom": "Freitext Unten",
             "Start Time": "Startzeit",
             "End Time": "Endzeit",
-            "Dynamic Scaling": "Dynamische Skalierung"
+            "Dynamic Scaling": "Dynamische Skalierung",
+            "Header Text": "Kopfzeile"
         }
     }
 }
