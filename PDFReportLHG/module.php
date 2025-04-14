@@ -254,7 +254,7 @@ class PDFReportLHG extends IPSModule
             $this->ReadPropertyInteger('AggregationLevel'),
             0,
             false,
-            false,
+            true,
             800,
             500
         ) . '</meta>';
