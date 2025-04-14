@@ -1,0 +1,14 @@
+{
+    "id": "{9DD58AF0-495C-2620-BF4A-2F2EF96C8927}",
+    "name": "PDF Report LHG",
+    "type": 3,
+    "vendor": "",
+    "aliases": [
+        "Report (PDF, LHG)"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "RAC",
+    "url": "https://www.symcon.de/en/service/documentation/module-reference/symconreport/pdfreport-lhg/"
+}

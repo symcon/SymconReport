@@ -1,0 +1,98 @@
+{
+    "status": [
+        {
+            "code": 200,
+            "icon": "error",
+            "caption": "The Counter has no data for last month"
+        }
+    ],
+    "elements": [
+        {
+            "type": "RowLayout",
+            "items": [
+                {
+                    "type": "SelectFile",
+                    "caption": "Logo",
+                    "extensions": ".png, .svg",
+                    "name": "LogoData"
+                },
+                {
+                    "type": "Select",
+                    "caption": "Decimal Separator",
+                    "name": "DecimalSeparator",
+                    "options": [
+                        {
+                            "caption": "Comma",
+                            "value": ","
+                        },
+                        {
+                            "caption": "Dot",
+                            "value": "."
+                        }
+                    ]
+                },
+                {
+                    "type": "Select",
+                    "name": "AggregationLevel",
+                    "caption": "Aggregation Level",
+                    "options": [
+                        {
+                            "caption": "Hourly",
+                            "value": 0
+                        },
+                        {
+                            "caption": "Daily",
+                            "value": 1
+                        },
+                        {
+                            "caption": "Weekly",
+                            "value": 2
+                        },
+                        {
+                            "caption": "Monthly",
+                            "value": 3
+                        }
+                    ]
+                },
+                {
+                    "type": "SelectModule",
+                    "name": "SMTP",
+                    "caption": "E-Mail SMTP",
+                    "moduleID": "{375EAF21-35EF-4BC4-83B3-C780FD8BD88A}"
+                }
+            ]
+        },
+        {
+            "type": "List",
+            "caption": "Energy Counters",
+            "name": "EnergyVariables",
+            "columns": [
+                {
+                    "caption": "Name",
+                    "name": "Name",
+                    "width": "250px",
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    },
+                    "add": ""
+                },
+                {
+                    "caption": "Counter",
+                    "name": "CounterVariable",
+                    "width": "auto",
+                    "add": 0,
+                    "edit": {
+                        "type": "SelectVariable",
+                        "requireLogging": 4,
+                        "validVariableTypes": [
+                            1,
+                            2
+                        ]
+                    }
+                }
+            ],
+            "add": true,
+            "delete": true
+        }
+    ]
+}
