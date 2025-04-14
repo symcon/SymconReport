@@ -12,7 +12,7 @@ class PDFReportLHG extends IPSModule
         parent::Create();
 
         //Properties
-        $this->RegisterPropertyString('LogoData', "");
+        $this->RegisterPropertyString('LogoData', '');
         $this->RegisterPropertyInteger('AggregationLevel', 1);
         $this->RegisterPropertyString('DecimalSeparator', ',');
         $this->RegisterPropertyString('EnergyVariables', '[]');
@@ -66,10 +66,9 @@ class PDFReportLHG extends IPSModule
         $dataset = [];
         $variables = json_decode($this->ReadPropertyString('EnergyVariables'), true);
         $this->SendDebug('Variables', print_r($variables, true), 0);
-        $currentMediaChart = json_decode(base64_decode(IPS_GetMediaContent($this->GetIDForIdent('MediaChart'))), true);
-        $currentDataset = $currentMediaChart['datasets'];
-        foreach ($variables as $key => $variable) {
-            if (!in_array($variable, array_column($currentDataset, 'variableID'))) {
+        if (@IPS_GetMediaContent($this->GetIDForIdent('MediaChart')) === false) {
+            foreach ($variables as $key => $variable) {
+
                 $dataset[] = [
                     'variableID'  => $variable['CounterVariable'],
                     'fillColor'   => 'clear',
@@ -78,6 +77,22 @@ class PDFReportLHG extends IPSModule
                     'visible'     => true,
                     'side'        => 'left',
                 ];
+
+            }
+        }else {
+            $currentMediaChart = json_decode(base64_decode(IPS_GetMediaContent($this->GetIDForIdent('MediaChart'))), true);
+            $currentDataset = $currentMediaChart['datasets'];
+            foreach ($variables as $key => $variable) {
+                if (!in_array($variable, array_column($currentDataset, 'variableID'))) {
+                    $dataset[] = [
+                        'variableID'  => $variable['CounterVariable'],
+                        'fillColor'   => 'clear',
+                        'strokeColor' => '#' . dechex(rand(0, 255)) . dechex(rand(0, 255)) . dechex(rand(0, 255)),
+                        'timeOffset'  => 0,
+                        'visible'     => true,
+                        'side'        => 'left',
+                    ];
+                }
             }
         }
         $id = $this->GetIDForIdent('MediaChart');
@@ -229,18 +244,18 @@ class PDFReportLHG extends IPSModule
     {
 
         $archivID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-        $this->SendDebug("end",date("d.m.y", strtotime("00:00:00", $this->GetValue('End'))), 0);
-        $this->SendDebug("Start", date("d.m.y",strtotime("00:00:00", $this->GetValue('Start')),), 0);
+        $this->SendDebug('end', date('d.m.y', strtotime('00:00:00', $this->GetValue('End'))), 0);
+        $this->SendDebug('Start', date('d.m.y', strtotime('00:00:00', $this->GetValue('Start'))), 0);
 
         $chart = '<meta xmlns:sym="symcon">' . AC_RenderChart(
             $archivID,
             $this->GetIDForIdent('MediaChart'),
-            strtotime("00:00:00", $this->GetValue('Start')),
+            strtotime('00:00:00', $this->GetValue('Start')),
             $this->ReadPropertyInteger('AggregationLevel'),
             0,
             false,
             false,
-            800, 
+            800,
             500
         ) . '</meta>';
         $example = simplexml_load_string($chart);
@@ -307,7 +322,7 @@ class PDFReportLHG extends IPSModule
 
         //Get the consumption
         foreach ($variables as $variable) {
-            $name = $variable["Name"] == "" ? IPS_GetName($variable['CounterVariable']) : $variable["Name"];
+            $name = $variable['Name'] == '' ? IPS_GetName($variable['CounterVariable']) : $variable['Name'];
             $variable = $variable['CounterVariable'];
             $aggregatedValues = AC_GetAggregatedValues($archiveID, $variable, $this->ReadPropertyInteger('AggregationLevel'), $startTime, $endTime, 0);
             $this->SendDebug('Values of' . $variable, print_r($aggregatedValues, true), 0);
