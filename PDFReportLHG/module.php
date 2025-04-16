@@ -16,6 +16,8 @@ class PDFReportLHG extends IPSModule
         $this->RegisterPropertyInteger('AggregationLevel', 1);
         $this->RegisterPropertyString('DecimalSeparator', ',');
         $this->RegisterPropertyString('EnergyVariables', '[]');
+        $this->RegisterPropertyInteger('SMTP', 0);
+        $this->RegisterPropertyInteger('DifferentReciever', 0);
 
         //Variables
         $this->RegisterVariableInteger('Start', $this->Translate('Start'), '~UnixTimestampDate', 1);
@@ -29,13 +31,13 @@ class PDFReportLHG extends IPSModule
             $this->SetValue('End', time());
         }
 
-        $this->RegisterScript('Generate', 'Generate', "<? RAC_GenerateMultiEnergyReport(IPS_GetParent(\$_IPS['SELF']));", 3);
+        $this->RegisterScript('Generate', 'Generate', "<? RAC_GenerateReport(IPS_GetParent(\$_IPS['SELF']));", 3);
         $this->RegisterMedia(5, 'ReportPDF', $this->Translate('Report (PDF)'), 'pdf', 4);
         $this->RegisterMedia(4, 'MediaChart', $this->Translate('Chart'), 'chart', 5);
 
     }
 
-    public function GenerateMultiEnergyReport(): bool
+    public function GenerateReport(): bool
     {
         if (count(json_decode($this->ReadPropertyString('EnergyVariables'), true)) === 0) {
             echo $this->Translate('No Variables are selected.');
@@ -97,6 +99,40 @@ class PDFReportLHG extends IPSModule
         }
         $id = $this->GetIDForIdent('MediaChart');
         IPS_SetMediaContent($id, base64_encode(json_encode(['datasets' => $dataset])));
+
+        $refs = $this->GetReferenceList();
+        foreach ($refs as $ref) {
+            $this->UnregisterReference($ref);
+        }
+        // Register reference of the counter and the reciever and the instance
+    }
+
+    public function SendReport(string $topic, string $body): bool
+    {
+        $smtp = $this->ReadPropertyInteger('SMTP');
+        if (!IPS_InstanceExists($smtp)) {
+            $this->SendDebug('SMTP', "Don't exist", 0);
+            return false;
+        }
+        if ($this->GenerateReport()) {
+            $reciever = $this->ReadPropertyInteger('DifferentReciever');
+            if (IPS_VariableExists($reciever)) {
+                $reciever = GetValue($reciever);
+                if (filter_var($reciever, FILTER_VALIDATE_EMAIL) === false) {
+                    $reciever = false;
+                }
+            }
+            else {
+                $reciever = false;
+            }
+            if ($reciever) {
+                return SMTP_SendMailMediaEx($smtp, $reciever, $topic, $body, $this->GetIDForIdent('ReportPDF'));
+            }
+            else {
+                return SMTP_SendMailMedia($smtp, $topic, $body, $this->GetIDForIdent('ReportPDF'));
+            }
+        }
+        $this->SendDebug('SendReport', 'Something is wrong', 0);
     }
 
     private function RegisterMediaDocument($Ident, $Name, $Extension, $Position = 0): void
@@ -172,7 +208,6 @@ class PDFReportLHG extends IPSModule
         //Chart
         //Charts
         $svg = $this->GenerateChart();
-        $this->SendDebug('XML', $svg, 0);
         $pdf->ImageSVG('@' . $svg, $x = 10, $pdf->GetY(), $w = 180, $h = '', $link = '', $align = '', $palign = '', $border = 0, $fitonpage = true);
 
         //Save the pdf

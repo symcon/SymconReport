@@ -59,6 +59,13 @@
                     "name": "SMTP",
                     "caption": "E-Mail SMTP",
                     "moduleID": "{375EAF21-35EF-4BC4-83B3-C780FD8BD88A}"
+                },
+                {
+                    "type": "SelectVariable",
+                    "name": "DifferentReciever",
+                    "caption": "DiffrentReciever",
+                    "validVariableTypes": [3]
+                  
                 }
             ]
         },
