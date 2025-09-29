@@ -44,6 +44,29 @@
                     }
                 },
                 {
+                    "caption": "Type",
+                    "name": "Type",
+                    "width": "auto",
+                    "add": "Avg",
+                    "edit": {
+                        "type": "Select",
+                        "options": [
+                            {
+                                "caption": "Average",
+                                "value": "Avg"
+                            },
+                            {
+                                "caption": "Minimum",
+                                "value": "Min"
+                            },
+                            {
+                                "caption": "Maximum",
+                                "value": "Max"
+                            }
+                        ]
+                    }
+                },
+                {
                     "caption": "Column Name",
                     "name": "Name",
                     "width": "auto",

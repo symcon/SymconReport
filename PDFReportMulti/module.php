@@ -185,7 +185,7 @@ EOT;
         $timeValues = [];
         foreach ($this->FetchData() as $id => $values) {
             foreach ($values as $value) {
-                $timeValues[$value['TimeStamp']][$id] = $value['Avg'];
+                $timeValues[$value['TimeStamp']][$id] = $value;
             }
         }
 
@@ -196,8 +196,9 @@ EOT;
             $rows .= '<td width="25%">' . date($this->GetDateTimeFormatForAggreagtion(), $ts) . '</td>';
             foreach ($json as $data) {
                 $rows .= '<td style="text-align: center;">';
-                if (isset($values[$data['VariableID']])) {
-                    $value = GetValueFormattedEx($data['VariableID'], $values[$data['VariableID']]);
+                $type = isset($data['Type']) ? $data['Type'] : 'Avg';
+                if (isset($values[$data['VariableID']][$type])) {
+                    $value = GetValueFormattedEx($data['VariableID'], $values[$data['VariableID']][$type]);
                     $rows .= $this->ReadPropertyString('DecimalSeparator') == ',' ? str_replace('.', ',', $value) : $value;
                 }
                 $rows .= '</td>';
