@@ -46,7 +46,7 @@
                 {
                     "caption": "Type",
                     "name": "Type",
-                    "width": "auto",
+                    "width": "150px",
                     "add": "Avg",
                     "edit": {
                         "type": "Select",
