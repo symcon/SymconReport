@@ -183,7 +183,7 @@ class PDFReportSingle extends IPSModule
 
         return <<<EOT
 			
-<table cellpadding="5" cellspacing="0" border="0" width="95%">
+<table cellpadding="3" cellspacing="0" border="0" width="95%">
 <tr>
 	<td width="50%"><img src="@$imageData"></td>
 	<td align="right">
@@ -256,7 +256,7 @@ $header
 <br/>
 <br/>
 <br/>
-<table cellpadding="5" cellspacing="0" border="0" width="95%">
+<table cellpadding="3" cellspacing="0" border="0" width="95%">
 	<tr style="background-color: #cccccc; padding:5px;">
 	   <td style="padding:5px;" width="25%"><b>$headDate</b></td>
 	   <td style="text-align: center;"><b>$headMin</b></td>
