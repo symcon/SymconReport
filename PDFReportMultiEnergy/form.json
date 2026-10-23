@@ -71,6 +71,7 @@
                 }
             ],
             "add": true,
+            "multiAdd": true,
             "delete": true
         }
     ],

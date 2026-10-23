@@ -30,6 +30,7 @@
             "name": "DataVariables",
             "caption": "Data Sources",
             "add": true,
+            "multiAdd": true,
             "delete": true,
             "rowCount": 5,
             "columns": [
