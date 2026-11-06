@@ -17,44 +17,6 @@
                     "name": "LogoData"
                 },
                 {
-                    "type": "Select",
-                    "caption": "Decimal Separator",
-                    "name": "DecimalSeparator",
-                    "options": [
-                        {
-                            "caption": "Comma",
-                            "value": ","
-                        },
-                        {
-                            "caption": "Dot",
-                            "value": "."
-                        }
-                    ]
-                },
-                {
-                    "type": "Select",
-                    "name": "AggregationLevel",
-                    "caption": "Aggregation Level",
-                    "options": [
-                        {
-                            "caption": "Hourly",
-                            "value": 0
-                        },
-                        {
-                            "caption": "Daily",
-                            "value": 1
-                        },
-                        {
-                            "caption": "Weekly",
-                            "value": 2
-                        },
-                        {
-                            "caption": "Monthly",
-                            "value": 3
-                        }
-                    ]
-                },
-                {
                     "type": "SelectModule",
                     "name": "SMTP",
                     "caption": "E-Mail SMTP",
@@ -63,7 +25,7 @@
                 {
                     "type": "SelectVariable",
                     "name": "DifferentReciever",
-                    "caption": "DiffrentReciever",
+                    "caption": "Different receiver (variable with e-mail address)",
                     "validVariableTypes": [3]
                   
                 }

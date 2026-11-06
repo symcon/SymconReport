@@ -6,6 +6,8 @@ include_once __DIR__ . '/../libs/vendor/autoload.php';
 
 class PDFReportLHG extends IPSModule
 {
+    private const COLORS = ['#9ACD32', '#4682B4', '#FF8C00', '#8B008B', '#20B2AA', '#DC143C', '#808000', '#1E90FF'];
+
     public function Create()
     {
         // Diese Zeile nicht löschen.
@@ -13,8 +15,6 @@ class PDFReportLHG extends IPSModule
 
         //Properties
         $this->RegisterPropertyString('LogoData', '');
-        $this->RegisterPropertyInteger('AggregationLevel', 1);
-        $this->RegisterPropertyString('DecimalSeparator', ',');
         $this->RegisterPropertyString('EnergyVariables', '[]');
         $this->RegisterPropertyInteger('SMTP', 0);
         $this->RegisterPropertyInteger('DifferentReciever', 0);
@@ -31,7 +31,7 @@ class PDFReportLHG extends IPSModule
             $this->SetValue('End', time());
         }
 
-        $this->RegisterScript('Generate', 'Generate', "<? RAC_GenerateReport(IPS_GetParent(\$_IPS['SELF']));", 3);
+        $this->RegisterScript('Generate', $this->Translate('Generate'), "<? RAC_GenerateReport(IPS_GetParent(\$_IPS['SELF']));", 3);
         $this->RegisterMedia(5, 'ReportPDF', $this->Translate('Report (PDF)'), 'pdf', 4);
         $this->RegisterMedia(4, 'MediaChart', $this->Translate('Chart'), 'chart', 5);
 
@@ -64,41 +64,35 @@ class PDFReportLHG extends IPSModule
     public function ApplyChanges()
     {
 
-        // crate MultiChart and give the id to renderChart
-        $dataset = [];
-        $variables = json_decode($this->ReadPropertyString('EnergyVariables'), true);
-        $this->SendDebug('Variables', print_r($variables, true), 0);
-        if (@IPS_GetMediaContent($this->GetIDForIdent('MediaChart')) === false) {
-            foreach ($variables as $key => $variable) {
-
-                $dataset[] = [
-                    'variableID'  => $variable['CounterVariable'],
-                    'fillColor'   => 'clear',
-                    'strokeColor' => '#' . dechex(rand(0, 255)) . dechex(rand(0, 255)) . dechex(rand(0, 255)),
+        // The chart is not used for the PDF, but allows to view the counters in the visualization
+        // Keep the datasets of existing counters (e.g. changed colors) and add new counters with the colors of the PDF
+        $chartID = $this->GetIDForIdent('MediaChart');
+        $currentDatasets = [];
+        $content = @IPS_GetMediaContent($chartID);
+        if ($content !== false && $content !== '') {
+            $currentChart = json_decode(base64_decode($content), true);
+            if (isset($currentChart['datasets'])) {
+                $currentDatasets = array_column($currentChart['datasets'], null, 'variableID');
+            }
+        }
+        $datasets = [];
+        foreach (json_decode($this->ReadPropertyString('EnergyVariables'), true) as $index => $variable) {
+            $variableID = $variable['CounterVariable'];
+            if (isset($currentDatasets[$variableID])) {
+                $datasets[] = $currentDatasets[$variableID];
+            } else {
+                $color = self::COLORS[$index % count(self::COLORS)];
+                $datasets[] = [
+                    'variableID'  => $variableID,
+                    'fillColor'   => $color,
+                    'strokeColor' => $color,
                     'timeOffset'  => 0,
                     'visible'     => true,
                     'side'        => 'left',
                 ];
-
-            }
-        }else {
-            $currentMediaChart = json_decode(base64_decode(IPS_GetMediaContent($this->GetIDForIdent('MediaChart'))), true);
-            $currentDataset = $currentMediaChart['datasets'];
-            foreach ($variables as $key => $variable) {
-                if (!in_array($variable, array_column($currentDataset, 'variableID'))) {
-                    $dataset[] = [
-                        'variableID'  => $variable['CounterVariable'],
-                        'fillColor'   => 'clear',
-                        'strokeColor' => '#' . dechex(rand(0, 255)) . dechex(rand(0, 255)) . dechex(rand(0, 255)),
-                        'timeOffset'  => 0,
-                        'visible'     => true,
-                        'side'        => 'left',
-                    ];
-                }
             }
         }
-        $id = $this->GetIDForIdent('MediaChart');
-        IPS_SetMediaContent($id, base64_encode(json_encode(['datasets' => $dataset])));
+        IPS_SetMediaContent($chartID, base64_encode(json_encode(['datasets' => $datasets])));
 
         $refs = $this->GetReferenceList();
         foreach ($refs as $ref) {
@@ -202,12 +196,14 @@ class PDFReportLHG extends IPSModule
 
         $pdf->writeHTML($this->GenerateHTMLHeader($logo), true, false, true, false, '');
 
+        //Text and chart are based on the same data to match each other
+        $data = $this->FetchData(json_decode($this->ReadPropertyString('EnergyVariables'), true));
+
         //Text
-        $pdf->writeHTML($this->GenerateHTMLText(), true, false, true, false, '');
+        $pdf->writeHTML($this->GenerateHTMLText($data), true, false, true, false, '');
 
         //Chart
-        //Charts
-        $svg = $this->GenerateChart();
+        $svg = $this->GenerateChart($data);
         $pdf->ImageSVG('@' . $svg, $x = 10, $pdf->GetY(), $w = 180, $h = '', $link = '', $align = '', $palign = '', $border = 0, $fitonpage = true);
 
         //Save the pdf
@@ -216,15 +212,11 @@ class PDFReportLHG extends IPSModule
 
     private function GenerateHTMLHeader($logo)
     {
-        $title = strtoupper($this->Translate('Consumption'));
+        $title = mb_strtoupper($this->Translate('Consumption'));
         //Get Times
-        $startTime = $this->GetValue('Start');
-        $endTime = $this->GetValue('End');
-        if ($startTime > $endTime) {
-            $startTime = $this->GetValue('End');
-            $endTime = $this->GetValue('Start');
-        }
-        $timestamps = $this->Translate('From') . ' ' . date('d.m.Y', $startTime) . ' ' . $this->Translate('to') . ' ' . date('d.m.Y', $endTime);
+        [$startTime, $endTime] = $this->GetTimeRange();
+        // The end is exclusive, so display the last day of the range
+        $timestamps = $this->Translate('From') . ' ' . date($this->Translate('m/d/Y'), $startTime) . ' ' . $this->Translate('to') . ' ' . date($this->Translate('m/d/Y'), $endTime - 1);
 
         return <<<EOT
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -242,116 +234,204 @@ class PDFReportLHG extends IPSModule
             EOT;
     }
 
-    private function GenerateHTMLText(): string
+    private function GenerateHTMLText(array $data): string
     {
         $dataText = '';
-        $data = $this->FetchData(json_decode($this->ReadPropertyString('EnergyVariables'), true));
         foreach ($data['Variables'] as $key => $variable) {
             $name = $variable['Name'];
-            $consumption = $variable['Consumption'];
-            $percentage = $variable['Percentage'];
-
-            //replace the decimal separator
-            $consumption = str_replace('.', $this->ReadPropertyString('DecimalSeparator'), strval($consumption));
-            $percentage = str_replace('.', $this->ReadPropertyString('DecimalSeparator'), strval($percentage));
+            $consumption = $this->FormatNumber($variable['Consumption'], 2);
             $this->SendDebug('Consumption', $consumption, 0);
-            $this->SendDebug('percentage', $percentage, 0);
+            $this->SendDebug('percentage', $variable['Percentage'], 0);
 
             $dataText .= <<<EOT
             $name : $consumption kWh<br />
             EOT;
         }
-        $totalConsumption = $data['Total'];
-        $totalConsumption = str_replace('.', $this->ReadPropertyString('DecimalSeparator'), strval($totalConsumption));
-        $textCounter = $this->Translate('Counter');
-        $textConsumption = $this->Translate('Consumption');
-        $textPercentage = $this->Translate('Percentage');
+        $totalConsumption = $this->FormatNumber($data['Total'], 2);
         $textTotalConsumption = $this->Translate('Total Consumption');
 
         return <<<EOT
         <br>
         <p>$dataText</p>
-        <h3>$textTotalConsumption: $totalConsumption kwh</h3>
+        <h3>$textTotalConsumption: $totalConsumption kWh</h3>
         EOT;
     }
 
-    private function GenerateChart()
+    private function GenerateChart(array $data): string
     {
+        $width = 800;
+        $height = 500;
+        $colors = self::COLORS;
+        $font = 'font-family="dejavusans"';
+        $variables = $data['Variables'];
+        $labels = $data['Labels'];
 
-        $archivID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-        $this->SendDebug('end', date('d.m.y', strtotime('00:00:00', $this->GetValue('End'))), 0);
-        $this->SendDebug('Start', date('d.m.y', strtotime('00:00:00', $this->GetValue('Start'))), 0);
+        //Layout: the legend is placed below the chart with 3 entries per row
+        $legendRows = intval(ceil(count($variables) / 3));
+        $plotLeft = 80;
+        $plotRight = $width - 20;
+        $plotTop = 30;
+        $plotBottom = $height - 50 - ($legendRows * 20);
 
-        $chart = '<meta xmlns:sym="symcon">' . AC_RenderChart(
-            $archivID,
-            $this->GetIDForIdent('MediaChart'),
-            strtotime('00:00:00', $this->GetValue('Start')),
-            $this->ReadPropertyInteger('AggregationLevel'),
-            0,
-            false,
-            true,
-            800,
-            500
-        ) . '</meta>';
-        $example = simplexml_load_string($chart);
-        $this->SendDebug('chart', $chart, 0);
-
-        //add text-anchor
-        foreach ($example->svg->g as $object) {
-            if ($object['class'] == 'y axis') {
-                $object->g->addAttribute('text-anchor', 'end');
+        //Stack the values of all variables (positive values upwards, negative values downwards)
+        $maxValue = 0;
+        $minValue = 0;
+        foreach (array_keys($labels) as $key) {
+            $positive = 0;
+            $negative = 0;
+            foreach ($variables as $variable) {
+                if ($variable['Values'][$key] >= 0) {
+                    $positive += $variable['Values'][$key];
+                } else {
+                    $negative += $variable['Values'][$key];
+                }
             }
+            $maxValue = max($maxValue, $positive);
+            $minValue = min($minValue, $negative);
+        }
+        if ($maxValue == $minValue) {
+            $maxValue = 1;
         }
 
-        //fill the bars
-        $object = $example->svg;
-        if ($object['class'] == 'bar multi') {
-            $object = $example->svg->g[3]->g[1];
-            $object->addAttribute('fill', 'yellowgreen');
-        } else {
-            //svg -> graphs -> outline
-            $object = $example->svg->g[3]->g[1]->g;
-            $object->addAttribute('stroke', 'black');
-            $object->addAttribute('fill', 'none');
+        //Calculate the y axis
+        $step = $this->GetAxisStep($maxValue - $minValue);
+        $decimals = $step < 1 ? intval(ceil(-log10($step))) : 0;
+        $axisMax = ceil($maxValue / $step) * $step;
+        $axisMin = floor($minValue / $step) * $step;
+        $getY = function ($value) use ($axisMin, $axisMax, $plotTop, $plotBottom)
+        {
+            return $plotBottom - (($value - $axisMin) / ($axisMax - $axisMin)) * ($plotBottom - $plotTop);
+        };
 
-            // svg -> graphs -> background
-            $object = $example->svg->g[3]->g[0]->g;
-            $object->addAttribute('opacity', '0');
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' . $width . '" height="' . $height . '" viewBox="0 0 ' . $width . ' ' . $height . '">';
+
+        //Grid and y axis labels
+        for ($value = $axisMin; $value <= $axisMax + ($step / 2); $value += $step) {
+            $y = round($getY($value), 2);
+            $svg .= '<line x1="' . $plotLeft . '" y1="' . $y . '" x2="' . $plotRight . '" y2="' . $y . '" stroke="#CCCCCC" stroke-width="1"/>';
+            $svg .= '<text x="' . ($plotLeft - 8) . '" y="' . ($y + 4) . '" ' . $font . ' font-size="12" text-anchor="end">' . $this->FormatNumber($value, $decimals) . '</text>';
+        }
+        $svg .= '<text x="' . ($plotLeft - 8) . '" y="' . ($plotTop - 12) . '" ' . $font . ' font-size="12" text-anchor="end">kWh</text>';
+
+        //Bars
+        $slotWidth = ($plotRight - $plotLeft) / max(count($labels), 1);
+        $barWidth = round($slotWidth * 0.7, 2);
+        $labelStep = intval(ceil(count($labels) / 16));
+        $index = 0;
+        foreach ($labels as $key => $label) {
+            $x = round($plotLeft + ($index * $slotWidth) + ($slotWidth * 0.15), 2);
+            $positive = 0;
+            $negative = 0;
+            foreach ($variables as $variableIndex => $variable) {
+                $value = $variable['Values'][$key];
+                if ($value == 0) {
+                    continue;
+                }
+                if ($value > 0) {
+                    $top = $getY($positive + $value);
+                    $bottom = $getY($positive);
+                    $positive += $value;
+                } else {
+                    $top = $getY($negative);
+                    $bottom = $getY($negative + $value);
+                    $negative += $value;
+                }
+                $svg .= '<rect x="' . $x . '" y="' . round($top, 2) . '" width="' . $barWidth . '" height="' . round($bottom - $top, 2) . '" fill="' . $colors[$variableIndex % count($colors)] . '"/>';
+            }
+
+            //Reduce the labels if there are too many bars
+            if (($index % $labelStep) == 0) {
+                $svg .= '<text x="' . round($x + ($barWidth / 2), 2) . '" y="' . ($plotBottom + 18) . '" ' . $font . ' font-size="11" text-anchor="middle">' . $label . '</text>';
+            }
+            $index++;
         }
 
-        //transform the grid
-        $object = $example->svg->g[0]->line;
-        for ($i = 0; $i < count($object); $i++) {
-            $node = $object[$i];
+        //Zero line
+        $y = round($getY(0), 2);
+        $svg .= '<line x1="' . $plotLeft . '" y1="' . $y . '" x2="' . $plotRight . '" y2="' . $y . '" stroke="#000000" stroke-width="1"/>';
 
-            //set the opacity of the vertical lines on 0 (trancparence)
-            //"remove" the vertical lines
-            if (!empty($node) && $node['class'] == 'gridLine y') {
-                $node->addAttribute('opacity', '0');
-            }
-            if (!empty($node) && $node['class'] == 'gridLine y firstLine') {
-                $node->addAttribute('opacity', '0');
-            }
-
-            //set the horizontal lines grey
-            if (!empty($node) && $node['class'] == 'gridLine x' || $node['class'] == 'gridLine x firstLine') {
-                $node->addAttribute('opacity', '.2');
-            }
+        //Legend
+        foreach ($variables as $variableIndex => $variable) {
+            $x = $plotLeft + (($variableIndex % 3) * 230);
+            $y = $plotBottom + 45 + (intval(floor($variableIndex / 3)) * 20);
+            $svg .= '<rect x="' . $x . '" y="' . ($y - 10) . '" width="12" height="12" fill="' . $colors[$variableIndex % count($colors)] . '"/>';
+            $svg .= '<text x="' . ($x + 18) . '" y="' . $y . '" ' . $font . ' font-size="12">' . htmlspecialchars($variable['Name'], ENT_XML1) . '</text>';
         }
 
-        return $example->asXML();
+        return $svg . '</svg>';
+    }
+
+    /**
+     * Formats the number with the decimal separator matching the language of the server
+     */
+    private function FormatNumber(float $value, int $decimals): string
+    {
+        return number_format($value, $decimals, $this->Translate('.'), '');
+    }
+
+    /**
+     * Returns a step size of 1, 2 or 5 multiplied by a power of ten, which results in about 5 grid lines
+     */
+    private function GetAxisStep(float $range): float
+    {
+        $roughStep = $range / 5;
+        $magnitude = pow(10, floor(log10($roughStep)));
+        foreach ([1, 2, 5] as $factor) {
+            if (($factor * $magnitude) >= $roughStep) {
+                return $factor * $magnitude;
+            }
+        }
+        return 10 * $magnitude;
+    }
+
+    /**
+     * Returns the selected time range [start, end) from 00:00:00 of the start day until 00:00:00 of the day after the end day
+     */
+    private function GetTimeRange(): array
+    {
+        $startTime = $this->GetValue('Start');
+        $endTime = $this->GetValue('End');
+        if ($startTime > $endTime) {
+            [$startTime, $endTime] = [$endTime, $startTime];
+        }
+        return [strtotime('00:00:00', $startTime), strtotime('+1 day', strtotime('00:00:00', $endTime))];
+    }
+
+    /**
+     * Returns how the values are grouped into the bars of the chart depending on the length of the time range
+     * Level: aggregation level for AC_GetAggregatedValues, Step: length of these periods,
+     * Key: date format to group the periods into bars, Label: date format of the bar labels
+     */
+    private function GetBarInterval(int $startTime, int $endTime): array
+    {
+        $days = round(($endTime - $startTime) / (60 * 60 * 24));
+        if ($days <= 1) {
+            return ['Level' => 0, 'Step' => '+1 hour', 'Key' => 'Y-m-d H', 'Label' => 'H:i'];
+        } elseif ($days <= 62) {
+            return ['Level' => 1, 'Step' => '+1 day', 'Key' => 'Y-m-d', 'Label' => $this->Translate('m/d')];
+        } elseif ($days <= 731) {
+            return ['Level' => 1, 'Step' => '+1 day', 'Key' => 'Y-m', 'Label' => $this->Translate('m/Y')];
+        }
+        return ['Level' => 1, 'Step' => '+1 day', 'Key' => 'Y', 'Label' => 'Y'];
     }
 
     private function FetchData(array $variables): array
     {
         $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-        //Get Times
-        $startTime = $this->GetValue('Start');
-        $endTime = $this->GetValue('End');
-        if ($startTime > $endTime) {
-            $startTime = $this->GetValue('End');
-            $endTime = $this->GetValue('Start');
+        [$startTime, $endTime] = $this->GetTimeRange();
+        $this->SendDebug('Time range', date('d.m.Y H:i', $startTime) . ' - ' . date('d.m.Y H:i', $endTime), 0);
+
+        //Create the bars of the chart
+        //Bars are grouped from whole hours/days, so they don't exceed the time range (e.g. the first month starts on the start day)
+        $interval = $this->GetBarInterval($startTime, $endTime);
+        $labels = [];
+        for ($time = $startTime; $time < $endTime; $time = strtotime($interval['Step'], $time)) {
+            $key = date($interval['Key'], $time);
+            if (!isset($labels[$key])) {
+                $labels[$key] = date($interval['Label'], $time);
+            }
         }
+
         $data = [];
         $totalConsumption = 0;
 
@@ -359,19 +439,25 @@ class PDFReportLHG extends IPSModule
         foreach ($variables as $variable) {
             $name = $variable['Name'] == '' ? IPS_GetName($variable['CounterVariable']) : $variable['Name'];
             $variable = $variable['CounterVariable'];
-            $aggregatedValues = AC_GetAggregatedValues($archiveID, $variable, $this->ReadPropertyInteger('AggregationLevel'), $startTime, $endTime, 0);
+            //AC_GetAggregatedValues returns all periods starting within [start, end], so the period starting at the end has to be excluded
+            $aggregatedValues = AC_GetAggregatedValues($archiveID, $variable, $interval['Level'], $startTime, $endTime - 1, 0);
             $this->SendDebug('Values of' . $variable, print_r($aggregatedValues, true), 0);
-            //ToDO look if the Values are 1000 and the Endtime match
 
-            if (count($aggregatedValues) === 1000 && $startTime != $aggregatedValues[array_key_last($aggregatedValues)]['TimeStamp']) {
-                $this->SendDebug('Variable ' . $variable, 'Too many datasets, get higher aggregationLevel, to fetch all datasets for the period', 0);
+            $barValues = array_fill_keys(array_keys($labels), 0);
+            foreach ($aggregatedValues as $aggregatedValue) {
+                $key = date($interval['Key'], $aggregatedValue['TimeStamp']);
+                if (isset($barValues[$key])) {
+                    $barValues[$key] += $aggregatedValue['Avg'];
+                }
             }
-            $consumption = round(array_sum(array_column($aggregatedValues, 'Avg')), 2);
+
+            $consumption = round(array_sum($barValues), 2);
             $totalConsumption += $consumption;
             $data[] = [
                 'Name'        => $name,
                 'Consumption' => $consumption,
-                'Percentage'  => 0
+                'Percentage'  => 0,
+                'Values'      => $barValues
             ];
         }
 
@@ -384,6 +470,7 @@ class PDFReportLHG extends IPSModule
             $data[$key]['Percentage'] = round(($value['Consumption'] / $totalConsumption) * 100, 2);
         }
         $values['Variables'] = $data;
+        $values['Labels'] = $labels;
 
         return $values;
     }

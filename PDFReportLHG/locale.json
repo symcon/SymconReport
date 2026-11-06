@@ -1,9 +1,27 @@
 {
     "translations": {
         "de": {
-            "Decimal Separator Comma": "Dezimaltrennzeichen",
-            "Dot": "Punkt",
-            "Comma": "Komma"
+            "The Counter has no data for last month": "Der Zähler hat keine Daten für den letzten Monat",
+            "Logo": "Logo",
+            "E-Mail SMTP": "E-Mail SMTP",
+            "Different receiver (variable with e-mail address)": "Abweichender Empfänger (Variable mit E-Mail-Adresse)",
+            "Energy Counters": "Energiezähler",
+            "Name": "Name",
+            "Counter": "Zähler",
+            "Start": "Start",
+            "End": "Ende",
+            "Generate": "Generieren",
+            "Report (PDF)": "Bericht (PDF)",
+            "Chart": "Diagramm",
+            "No Variables are selected.": "Es sind keine Variablen ausgewählt.",
+            "Consumption": "Verbrauch",
+            "From": "Von",
+            "to": "bis",
+            "Total Consumption": "Gesamtverbrauch",
+            "m/d/Y": "d.m.Y",
+            "m/d": "d.m.",
+            "m/Y": "m.Y",
+            ".": ","
         }
     }
 }
