@@ -26,8 +26,9 @@
                     "type": "SelectVariable",
                     "name": "DifferentReciever",
                     "caption": "Different receiver (variable with e-mail address)",
-                    "validVariableTypes": [3]
-                  
+                    "validVariableTypes": [
+                        3
+                    ]
                 }
             ]
         },
