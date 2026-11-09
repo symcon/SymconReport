@@ -34,7 +34,7 @@
         },
         {
             "type": "List",
-            "caption": "Energy Counters",
+            "caption": "Counters",
             "name": "EnergyVariables",
             "columns": [
                 {

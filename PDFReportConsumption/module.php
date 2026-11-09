@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 include_once __DIR__ . '/../libs/vendor/autoload.php';
 
-class PDFReportLHG extends IPSModule
+class PDFReportConsumption extends IPSModule
 {
     private const COLORS = ['#9ACD32', '#4682B4', '#FF8C00', '#8B008B', '#20B2AA', '#DC143C', '#808000', '#1E90FF'];
 
@@ -238,22 +238,22 @@ class PDFReportLHG extends IPSModule
     {
         $dataText = '';
         foreach ($data['Variables'] as $key => $variable) {
-            $name = $variable['Name'];
-            $consumption = $this->FormatNumber($variable['Consumption'], 2);
+            $name = htmlspecialchars($variable['Name']);
+            $consumption = GetValueFormattedEx($data['FormatVariableID'], $variable['Consumption']);
             $this->SendDebug('Consumption', $consumption, 0);
             $this->SendDebug('percentage', $variable['Percentage'], 0);
 
             $dataText .= <<<EOT
-            $name : $consumption kWh<br />
+            $name : $consumption<br />
             EOT;
         }
-        $totalConsumption = $this->FormatNumber($data['Total'], 2);
+        $totalConsumption = GetValueFormattedEx($data['FormatVariableID'], $data['Total']);
         $textTotalConsumption = $this->Translate('Total Consumption');
 
         return <<<EOT
         <br>
         <p>$dataText</p>
-        <h3>$textTotalConsumption: $totalConsumption kWh</h3>
+        <h3>$textTotalConsumption: $totalConsumption</h3>
         EOT;
     }
 
@@ -268,7 +268,6 @@ class PDFReportLHG extends IPSModule
 
         //Layout: the legend is placed below the chart with 3 entries per row
         $legendRows = intval(ceil(count($variables) / 3));
-        $plotLeft = 80;
         $plotRight = $width - 20;
         $plotTop = 30;
         $plotBottom = $height - 50 - ($legendRows * 20);
@@ -298,6 +297,9 @@ class PDFReportLHG extends IPSModule
         $decimals = $step < 1 ? intval(ceil(-log10($step))) : 0;
         $axisMax = ceil($maxValue / $step) * $step;
         $axisMin = floor($minValue / $step) * $step;
+        $formatVariableID = $data['FormatVariableID'];
+        //The length of the formatted values depends on the variable, so the plot starts after the longest label
+        $plotLeft = max(80, 16 + (8 * max(mb_strlen(GetValueFormattedEx($formatVariableID, $axisMin)), mb_strlen(GetValueFormattedEx($formatVariableID, $axisMax)))));
         $getY = function ($value) use ($axisMin, $axisMax, $plotTop, $plotBottom)
         {
             return $plotBottom - (($value - $axisMin) / ($axisMax - $axisMin)) * ($plotBottom - $plotTop);
@@ -309,9 +311,8 @@ class PDFReportLHG extends IPSModule
         for ($value = $axisMin; $value <= $axisMax + ($step / 2); $value += $step) {
             $y = round($getY($value), 2);
             $svg .= '<line x1="' . $plotLeft . '" y1="' . $y . '" x2="' . $plotRight . '" y2="' . $y . '" stroke="#CCCCCC" stroke-width="1"/>';
-            $svg .= '<text x="' . ($plotLeft - 8) . '" y="' . ($y + 4) . '" ' . $font . ' font-size="12" text-anchor="end">' . $this->FormatNumber($value, $decimals) . '</text>';
+            $svg .= '<text x="' . ($plotLeft - 8) . '" y="' . ($y + 4) . '" ' . $font . ' font-size="12" text-anchor="end">' . htmlspecialchars(GetValueFormattedEx($formatVariableID, round($value, $decimals)), ENT_XML1) . '</text>';
         }
-        $svg .= '<text x="' . ($plotLeft - 8) . '" y="' . ($plotTop - 12) . '" ' . $font . ' font-size="12" text-anchor="end">kWh</text>';
 
         //Bars
         $slotWidth = ($plotRight - $plotLeft) / max(count($labels), 1);
@@ -359,14 +360,6 @@ class PDFReportLHG extends IPSModule
         }
 
         return $svg . '</svg>';
-    }
-
-    /**
-     * Formats the number with the decimal separator matching the language of the server
-     */
-    private function FormatNumber(float $value, int $decimals): string
-    {
-        return number_format($value, $decimals, $this->Translate('.'), '');
     }
 
     /**
@@ -471,6 +464,8 @@ class PDFReportLHG extends IPSModule
         }
         $values['Variables'] = $data;
         $values['Labels'] = $labels;
+        //All values of the report are formatted based on the first counter
+        $values['FormatVariableID'] = $variables[0]['CounterVariable'];
 
         return $values;
     }

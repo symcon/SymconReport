@@ -5,7 +5,7 @@
             "Logo": "Logo",
             "E-Mail SMTP": "E-Mail SMTP",
             "Different receiver (variable with e-mail address)": "Abweichender Empfänger (Variable mit E-Mail-Adresse)",
-            "Energy Counters": "Energiezähler",
+            "Counters": "Zähler",
             "Name": "Name",
             "Counter": "Zähler",
             "Start": "Start",
@@ -20,8 +20,7 @@
             "Total Consumption": "Gesamtverbrauch",
             "m/d/Y": "d.m.Y",
             "m/d": "d.m.",
-            "m/Y": "m.Y",
-            ".": ","
+            "m/Y": "m.Y"
         }
     }
 }
