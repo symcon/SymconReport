@@ -63,7 +63,7 @@ class PDFReportConsumption extends IPSModule
 
     public function ApplyChanges()
     {
-
+        parent::ApplyChanges();
         // The chart is not used for the PDF, but allows to view the counters in the visualization
         // Keep the datasets of existing counters (e.g. changed colors) and add new counters with the colors of the PDF
         $chartID = $this->GetIDForIdent('MediaChart');
@@ -98,7 +98,19 @@ class PDFReportConsumption extends IPSModule
         foreach ($refs as $ref) {
             $this->UnregisterReference($ref);
         }
-        // Register reference of the counter and the reciever and the instance
+        foreach (json_decode($this->ReadPropertyString('EnergyVariables'), true) as $variable) {
+            if (IPS_VariableExists($variable['CounterVariable'])) {
+                $this->RegisterReference($variable['CounterVariable']);
+            }
+        }
+        $receiverID = $this->ReadPropertyInteger('DifferentReciever');
+        if (IPS_VariableExists($receiverID)) {
+            $this->RegisterReference($receiverID);
+        }
+        $smtpID = $this->ReadPropertyInteger('SMTP');
+        if (IPS_InstanceExists($smtpID)) {
+            $this->RegisterReference($smtpID);
+        }
     }
 
     public function SendReport(string $topic, string $body): bool
@@ -127,6 +139,7 @@ class PDFReportConsumption extends IPSModule
             }
         }
         $this->SendDebug('SendReport', 'Something is wrong', 0);
+        return false;
     }
 
     private function RegisterMediaDocument($Ident, $Name, $Extension, $Position = 0): void
@@ -444,7 +457,7 @@ class PDFReportConsumption extends IPSModule
                 }
             }
 
-            $consumption = round(array_sum($barValues), 2);
+            $consumption = array_sum($barValues);
             $totalConsumption += $consumption;
             $data[] = [
                 'Name'        => $name,
