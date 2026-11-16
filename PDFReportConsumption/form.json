@@ -1,0 +1,68 @@
+{
+    "status": [
+        {
+            "code": 200,
+            "icon": "error",
+            "caption": "The Counter has no data for last month"
+        }
+    ],
+    "elements": [
+        {
+            "type": "RowLayout",
+            "items": [
+                {
+                    "type": "SelectFile",
+                    "caption": "Logo",
+                    "extensions": ".png, .svg",
+                    "name": "LogoData"
+                },
+                {
+                    "type": "SelectModule",
+                    "name": "SMTP",
+                    "caption": "E-Mail SMTP",
+                    "moduleID": "{375EAF21-35EF-4BC4-83B3-C780FD8BD88A}"
+                },
+                {
+                    "type": "SelectVariable",
+                    "name": "DifferentReciever",
+                    "caption": "Different receiver (variable with e-mail address)",
+                    "validVariableTypes": [
+                        3
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "List",
+            "caption": "Counters",
+            "name": "EnergyVariables",
+            "columns": [
+                {
+                    "caption": "Name",
+                    "name": "Name",
+                    "width": "250px",
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    },
+                    "add": ""
+                },
+                {
+                    "caption": "Counter",
+                    "name": "CounterVariable",
+                    "width": "auto",
+                    "add": 0,
+                    "edit": {
+                        "type": "SelectVariable",
+                        "requireLogging": 4,
+                        "validVariableTypes": [
+                            1,
+                            2
+                        ]
+                    }
+                }
+            ],
+            "add": true,
+            "delete": true
+        }
+    ]
+}
